@@ -33,18 +33,7 @@ public class GameView extends android.support.constraint.ConstraintLayout {
             public void run() {
                 while(true) {
                     _game.updateState();
-                    Handler mainHandler = new Handler(getMainLooper());
-                    mainHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                invalidate();
-                            } catch (Exception ex) {
-                                Log.getStackTraceString(ex);
-                            }
-                        }
-                    });
-
+                    redraw();
 
                     try {
                         Thread.sleep(50);
@@ -55,6 +44,20 @@ public class GameView extends android.support.constraint.ConstraintLayout {
             }
         }).start();
 
+    }
+
+    private void redraw() {
+        Handler mainHandler = new Handler(getMainLooper());
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    invalidate();
+                } catch (Exception ex) {
+                    Log.getStackTraceString(ex);
+                }
+            }
+        });
     }
 
     @Override

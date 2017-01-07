@@ -2,7 +2,14 @@ package com.example.alisa.myproject.game;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Point;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Alisa on 1/7/2017.
@@ -12,107 +19,63 @@ public class Game {
 
     private final View _view;
     private final Context _context;
-    private final GameObject _ganmeObject;
+    private final List<GameObject> _ganmeObjects;
+    private final BirdCreator _birdCreator;
 
-    /*
-        int posX=0;
-        int posY=0;
-
-        int directionY=10;
-        int directionX=0;
-
-        private static final int NUM_FRAMES = 3;
-        private static final float X_SPEED = 28f;
-        Bitmap bgBitmap;
-        Character[] ch;
-        float birdXPosition = 10;
-        RectF dst0;
-        RectF dst1 = new RectF();
-        Rect[] frames = new Rect[NUM_FRAMES];
-        int mCharHeight;
-        int mCharWidth;
-        int naiveFrameNam=0;
-        Bitmap spritesBitmap;
-        Bitmap Bitmapb1;
-        Bitmap Bitmapb2;
-        Bitmap Bitmapb3;
-
-        Paint topRectPaint = new Paint();
-        private int mViewHeight;
-        private int mViewWidth;
-        private Bitmap smallBirdSprite;
-    */
     public Game(Context context, View view)
     {
         _view =view;
         _context=context;
-        _ganmeObject = new GameObject(context,view);
-  //      dst0 = new RectF(frames[0]);
-  //      dst0.offset(10, 10); // like translate for canvas
-  //      prepareCharacter();
-    }
-/*
-    private void prepareCharacter() {
-        spritesBitmap = BitmapFactory.decodeResource(_view.getResources(), R.drawable.newbird_sprite);
-
-        double ratio = spritesBitmap.getHeight()/(float)spritesBitmap.getWidth();
-        int smallWidth=700;
-        int smallHeight = (int)(smallWidth*ratio);
-        smallBirdSprite = Bitmap.createScaledBitmap(spritesBitmap, smallWidth, smallHeight, false);
-
-
-        // setup the rects
-        mCharWidth = smallBirdSprite.getWidth() / 3;
-        mCharHeight = smallBirdSprite.getHeight();
-
-        int i = 0; // rect index
-        for (int x = 0; x < 3; x++) { // column
-            frames[i] = new Rect(x * mCharWidth, 0, (x + 1) * mCharWidth, mCharHeight);
-            i++;
-            if (i >= NUM_FRAMES) {
-                break;
-            }
-        }
-        dst0=new RectF(birdXPosition, 0,
-                birdXPosition+mCharWidth,
-                mCharHeight);
+        _ganmeObjects = new ArrayList<GameObject>();
+        _birdCreator = new BirdCreator(_context,_view,this,1000*3);
 
     }
-*/
     private void createBackgroundImage(Canvas canvas) {
-/*
-        if (bgBitmap != null) {
-            bgBitmap.recycle();
-        }
-        */
     }
-
-
     //API
 
     public void updateState()
     {
-        _ganmeObject.updateState();
-        /*
-        posY++;
-
-        if(dst0.centerY()>100 || dst0.centerY()<0)
-        {
-            directionY=directionY*-1;
+        for (GameObject gameObj: _ganmeObjects) {
+            gameObj.updateState();
         }
-        dst0.offset(0,directionY);
 
-        naiveFrameNam=(naiveFrameNam+1)%frames.length;
-*/
+        for (GameObject gameObj: new ArrayList<>(_ganmeObjects)) {
+            if(!gameObj.isAlive()){
+                _ganmeObjects.remove(gameObj);
+            }
+        }
+
+        _birdCreator.createBird();
     }
 
     public void draw(Canvas canvas)
     {
         createBackgroundImage(canvas);
 
-        _ganmeObject.draw(canvas);
-        //canvas.drawBitmap(smallBirdSprite, frames[naiveFrameNam], dst0, null);
+        for (GameObject gameObj: _ganmeObjects) {
+            gameObj.draw(canvas);
+        }
+
+    }
+
+    private Point _screenSize;
+    public Point getScreenSize()
+    {
+        if(_screenSize!=null){
+            return _screenSize;
+        }
+        WindowManager wm = (WindowManager) _context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return _screenSize = size;
+    }
+
+    public  void addGameObject(GameObject gameObject) {
+        _ganmeObjects.add(gameObject);
     }
 
     //API
+
 }

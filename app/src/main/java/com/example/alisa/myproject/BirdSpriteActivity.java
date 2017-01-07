@@ -3,6 +3,8 @@ package com.example.alisa.myproject;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.alisa.myproject.R;
+
 public class BirdSpriteActivity extends AppCompatActivity {
 
     @Override
