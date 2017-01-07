@@ -1,4 +1,4 @@
-package com.example.alisa.myproject;
+package com.example.alisa.myproject.game;
 
 import android.graphics.Point;
 
