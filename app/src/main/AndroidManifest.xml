@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SkyBackground" />
-
+        <activity android:name=".MyMusicRunnable" />
     </application>
 
 </manifest>

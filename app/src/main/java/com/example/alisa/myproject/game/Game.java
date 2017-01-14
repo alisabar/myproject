@@ -28,7 +28,6 @@ public class Game {
         _context=context;
         _ganmeObjects = new ArrayList<GameObject>();
         _birdCreator = new BirdCreator(_context,_view,this,1000*3);
-
     }
     private void createBackgroundImage(Canvas canvas) {
     }
