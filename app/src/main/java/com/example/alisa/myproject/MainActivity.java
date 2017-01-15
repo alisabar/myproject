@@ -1,8 +1,10 @@
 package com.example.alisa.myproject;
 
+import android.content.Intent;
 import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import java.io.Console;
 import java.io.PrintStream;
@@ -13,7 +15,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        MyMusicRunnable mp=new MyMusicRunnable(this);
-        new Thread(mp).start();
     }
+
+public void PlayButton(View view){
+    Intent i = new Intent(this, BirdSpriteActivity.class);
+    startActivity(i);
+
+}
 }
