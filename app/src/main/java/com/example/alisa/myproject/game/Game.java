@@ -43,7 +43,7 @@ public class Game {
         _background = BitmapFactory.decodeResource(_view.getResources(), R.drawable.sky3);
 
     }
-    private void createBackgroundImage(Canvas canvas) {
+    private void drawBackgroundImage(Canvas canvas) {
         canvas.drawBitmap(_background,0,0,null);
     }
 
@@ -67,7 +67,7 @@ public class Game {
 
     public void draw(Canvas canvas)
     {
-        createBackgroundImage(canvas);
+        drawBackgroundImage(canvas);
 
         for (GameObject gameObj: _ganmeObjects) {
             gameObj.draw(canvas);

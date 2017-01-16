@@ -15,7 +15,7 @@ import android.view.WindowManager;
  * Created by Alisa on 12/28/2016.
  */
 
-public abstract class GameObject {
+public abstract class GameObject  {
 
     int directionX=0;
 
@@ -107,6 +107,7 @@ public abstract class GameObject {
     public void setLocation(RectF location) {
         this.location = location;
     }
+
 
 
     public boolean isAlive() {

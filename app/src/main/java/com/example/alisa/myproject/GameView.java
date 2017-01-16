@@ -1,9 +1,12 @@
 package com.example.alisa.myproject;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.example.alisa.myproject.game.Game;
 
@@ -20,13 +23,19 @@ public class GameView extends android.support.constraint.ConstraintLayout {
     public GameView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         setWillNotDraw(false);
-        _game=new Game(getContext(),this);
-      initThread();
-        MyMusicRunnable mp=new MyMusicRunnable(context);
-        new Thread(mp).start();
+
 
     }
     Game _game;
+
+    @Override
+    protected void onVisibilityChanged(View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+        _game=new Game(getContext(),this);
+        initThread();
+        MyMusicRunnable mp=new MyMusicRunnable(getContext());
+        new Thread(mp).start();
+    }
 
     public void initThread(){
 

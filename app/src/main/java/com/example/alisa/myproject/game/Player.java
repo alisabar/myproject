@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.alisa.myproject.R;
@@ -15,10 +17,28 @@ import static android.R.attr.bitmap;
  */
 
 public class Player extends GameObject{
+    private View.OnTouchListener touchListener = new View.OnTouchListener() {
 
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+Log.d("touch","On touch");
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getX() > getLocation().centerX()) {
+                    move_right();
+                    return true;
+                } else if (event.getX() < getLocation().centerX()) {
+                    moveLeft();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+    };
 
     public Player(Context context, View view, Game game, Point location) {
         super(context, view, game, location);
+        view.setOnTouchListener(touchListener);
     }
 
     public void moveLeft()

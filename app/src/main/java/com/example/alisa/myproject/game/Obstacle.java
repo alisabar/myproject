@@ -31,6 +31,7 @@ public class Obstacle {
         y-=5;
         if(0>y) y=0;
          position.y=y;
+
     }
 
 }
