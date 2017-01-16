@@ -1,6 +1,7 @@
 package com.example.alisa.myproject.game;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.view.View;
 
@@ -26,22 +27,26 @@ public class BirdObstecale extends GameObject {
 
     @Override
     protected int getSpriteResourceId() {
-        return R.drawable.newbird_sprite;
+        return R.drawable.newbird_sprite_down;
     }
 
     @Override
     public void updateState() {
         getLocation().offset(0,directionY);
 
-        naiveFrameNam=(naiveFrameNam+1)%frames.length;
-
-
         Point screenSize = _game.getScreenSize();
         if(getLocation().centerY() >  screenSize.y){
             setAlive(false);
         }
     }
+    @Override
+    protected Bitmap createSmallBitmap(Bitmap bitmap){
+        double ratio = spritesBitmap.getHeight()/(float)spritesBitmap.getWidth();
+        int smallWidth=700;
+        int smallHeight = (int)(smallWidth*ratio);
+        return Bitmap.createScaledBitmap(spritesBitmap, smallWidth, smallHeight, false);
 
+    }
 
 
 }

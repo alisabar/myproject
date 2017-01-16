@@ -34,7 +34,7 @@ public abstract class GameObject {
     protected final View _view;
     protected final Context _context;
     protected Game _game;
-    private Bitmap smallBirdSprite;
+    //private Bitmap smallBirdSprite;
 
     private boolean alive;
 
@@ -60,19 +60,14 @@ public abstract class GameObject {
 
     private void prepareCharacter() {
         spritesBitmap = BitmapFactory.decodeResource(_view.getResources(), getSpriteResourceId());
-
-        double ratio = spritesBitmap.getHeight()/(float)spritesBitmap.getWidth();
-        int smallWidth=700;
-        int smallHeight = (int)(smallWidth*ratio);
-        smallBirdSprite = Bitmap.createScaledBitmap(spritesBitmap, smallWidth, smallHeight, false);
-
+        spritesBitmap=createSmallBitmap(spritesBitmap);
 
         // setup the rects
 
         int frameNum= getNumberOfFramesInSprite();
 
-        mCharWidth = smallBirdSprite.getWidth() / frameNum;
-        mCharHeight = smallBirdSprite.getHeight();
+        mCharWidth = spritesBitmap.getWidth() / frameNum;
+        mCharHeight = spritesBitmap.getHeight();
 
         int i = 0; // rect index
         for (int x = 0; x < frameNum; x++) { // column
@@ -87,7 +82,13 @@ public abstract class GameObject {
                 mCharHeight));
 
     }
-   protected abstract int getNumberOfFramesInSprite();
+
+    protected Bitmap createSmallBitmap(Bitmap spritesBitmap)
+    {
+        return spritesBitmap;
+    }
+
+    protected abstract int getNumberOfFramesInSprite();
 
     protected abstract  int getSpriteResourceId() ;
 
@@ -95,7 +96,8 @@ public abstract class GameObject {
 
     public void draw(Canvas canvas)
     {
-        canvas.drawBitmap(smallBirdSprite, frames[naiveFrameNam], getLocation(), null);
+        naiveFrameNam=(naiveFrameNam+1)%frames.length;
+        canvas.drawBitmap(spritesBitmap, frames[naiveFrameNam], getLocation(), null);
     }
 
     public RectF getLocation() {

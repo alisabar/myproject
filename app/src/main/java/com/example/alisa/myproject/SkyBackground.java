@@ -28,7 +28,7 @@ public class SkyBackground extends AppCompatActivity {
         size=new Point();
         d.getSize(size);
         random_generator=new Random();
-        player=new Player(size.x,BitmapFactory.decodeResource(getResources(),R.drawable.plane));
+        //player=new Player(size.x,BitmapFactory.decodeResource(getResources(),R.drawable.plane));
     }
 
     public void addObstacle()
