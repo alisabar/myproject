@@ -1,15 +1,18 @@
 package com.example.alisa.myproject.game;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.example.alisa.myproject.R;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Alisa on 1/7/2017.
@@ -21,6 +24,8 @@ public class Game {
     private final Context _context;
     private final List<GameObject> _ganmeObjects;
     private final BirdCreator _birdCreator;
+    private final Player _player;
+    private final Bitmap _background;
 
     public Game(Context context, View view)
     {
@@ -28,10 +33,20 @@ public class Game {
         _context=context;
         _ganmeObjects = new ArrayList<GameObject>();
         _birdCreator = new BirdCreator(_context,_view,this,1000*3);
+        //
+        _player=new Player(
+                _context
+                ,_view
+                ,this
+                ,new Point(getScreenSize().x/2-100,getScreenSize().y-1000)
+        );
+        _background = BitmapFactory.decodeResource(_view.getResources(), R.drawable.sky3);
 
     }
     private void createBackgroundImage(Canvas canvas) {
+        canvas.drawBitmap(_background,0,0,null);
     }
+
     //API
 
     public void updateState()
@@ -47,6 +62,7 @@ public class Game {
         }
 
         _birdCreator.createBird();
+        _player.updateState();
     }
 
     public void draw(Canvas canvas)
@@ -56,7 +72,7 @@ public class Game {
         for (GameObject gameObj: _ganmeObjects) {
             gameObj.draw(canvas);
         }
-
+        _player.draw(canvas);
     }
 
     private Point _screenSize;
