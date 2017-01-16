@@ -22,6 +22,8 @@ public class GameView extends android.support.constraint.ConstraintLayout {
         setWillNotDraw(false);
         _game=new Game(getContext(),this);
       initThread();
+        MyMusicRunnable mp=new MyMusicRunnable(context);
+        new Thread(mp).start();
 
     }
     Game _game;
