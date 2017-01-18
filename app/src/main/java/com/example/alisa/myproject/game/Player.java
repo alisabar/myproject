@@ -35,9 +35,14 @@ Log.d("touch","On touch");
         }
 
     };
+    private int lifePoints;
 
+    public int getLifePoints(){
+        return lifePoints;
+    }
     public Player(Context context, View view, Game game, Point location) {
         super(context, view, game, location);
+        lifePoints=3;
         view.setOnTouchListener(touchListener);
     }
 
@@ -83,5 +88,9 @@ Log.d("touch","On touch");
         int smallHeight = (int)(smallWidth*ratio);
         return Bitmap.createScaledBitmap(spritesBitmap, smallWidth, smallHeight, false);
 
+    }
+
+    public void decreaseLife(int numOfLifePoints) {
+        lifePoints=lifePoints-numOfLifePoints;
     }
 }

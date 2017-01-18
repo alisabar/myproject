@@ -63,7 +63,25 @@ public class Game {
 
         _birdCreator.createBird();
         _player.updateState();
+
+        //handle collisions
+        for (GameObject gameObj: new ArrayList<>(_ganmeObjects)) {
+            // if collides
+            if(_player.getLocation().intersect(gameObj.getLocation())){
+                collideWithObstecle();
+            }
+        }
+
+        //is end game
+        if (_player.getLifePoints()<=0){
+            //end of game
+        }
     }
+
+    private void collideWithObstecle() {
+        _player.decreaseLife(1);
+    }
+
 
     public void draw(Canvas canvas)
     {
