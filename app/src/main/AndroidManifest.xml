@@ -17,6 +17,15 @@
         </activity>
         <activity android:name=".BirdSpriteActivity" />
         <activity android:name=".SkyBackground" />
+        <activity
+            android:name=".GameOverActivity"
+            android:label="@string/title_activity_game_over"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.alisa.myproject.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

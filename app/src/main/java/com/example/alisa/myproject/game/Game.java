@@ -1,14 +1,20 @@
 package com.example.alisa.myproject.game;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.RectF;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.example.alisa.myproject.GameOverActivity;
 import com.example.alisa.myproject.R;
 
 import java.util.ArrayList;
@@ -26,9 +32,15 @@ public class Game {
     private final BirdCreator _birdCreator;
     private final Player _player;
     private final Bitmap _background;
+    private final Paint _textPaint;
 
     public Game(Context context, View view)
     {
+        _textPaint = new Paint();
+        _textPaint.setColor(Color.BLACK);
+        _textPaint.setTextSize(50);
+
+        _gameEnded=false;
         _view =view;
         _context=context;
         _ganmeObjects = new ArrayList<GameObject>();
@@ -47,10 +59,16 @@ public class Game {
         canvas.drawBitmap(_background,0,0,null);
     }
 
+    boolean _gameEnded;
     //API
-
+    public boolean gameEnded(){
+        return _gameEnded;
+    }
     public void updateState()
     {
+        if(_gameEnded){
+            return;
+        }
         for (GameObject gameObj: _ganmeObjects) {
             gameObj.updateState();
         }
@@ -65,9 +83,11 @@ public class Game {
         _player.updateState();
 
         //handle collisions
+        RectF playerLocation= new RectF(_player.getLocation());
+
         for (GameObject gameObj: new ArrayList<>(_ganmeObjects)) {
             // if collides
-            if(_player.getLocation().intersect(gameObj.getLocation())){
+            if(playerLocation.intersect(gameObj.getLocation())){
                 collideWithObstecle();
             }
         }
@@ -75,7 +95,14 @@ public class Game {
         //is end game
         if (_player.getLifePoints()<=0){
             //end of game
+            gameOver();
         }
+    }
+
+    private void gameOver() {
+        _gameEnded=true;
+        //go to game over screen
+        _context.startActivity(new Intent(_context, GameOverActivity.class));
     }
 
     private void collideWithObstecle() {
@@ -85,12 +112,27 @@ public class Game {
 
     public void draw(Canvas canvas)
     {
+        if(_gameEnded){
+            return;
+        }
         drawBackgroundImage(canvas);
+
+        drawLife(canvas);
 
         for (GameObject gameObj: _ganmeObjects) {
             gameObj.draw(canvas);
         }
         _player.draw(canvas);
+    }
+
+    private void drawLife(Canvas canvas) {
+        try {
+            String lifeString="Life:"+_player.getLifePoints();
+
+            canvas.drawText(lifeString,10,20,_textPaint);
+        } catch (Exception e) {
+            Log.e(getClass().getName(),"drawLife",e);
+        }
     }
 
     private Point _screenSize;

@@ -1,11 +1,9 @@
 package com.example.alisa.myproject;
-import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.alisa.myproject.game.Game;
@@ -17,6 +15,9 @@ import static android.os.Looper.getMainLooper;
  */
 
 public class GameView extends android.support.constraint.ConstraintLayout {
+    private MyMusicRunnable _myMusicRunnable;
+    private boolean _paused;
+
     public GameView(Context context) {
         super(context);
     }
@@ -28,21 +29,17 @@ public class GameView extends android.support.constraint.ConstraintLayout {
     }
     Game _game;
 
-    @Override
-    protected void onVisibilityChanged(View changedView, int visibility) {
-        super.onVisibilityChanged(changedView, visibility);
-        _game=new Game(getContext(),this);
-        initThread();
-        MyMusicRunnable mp=new MyMusicRunnable(getContext());
-        new Thread(mp).start();
+    private void initMusicThread() {
+        _myMusicRunnable =new MyMusicRunnable(getContext());
+        new Thread(_myMusicRunnable).start();
     }
 
-    public void initThread(){
+    public void initGameThread(){
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while(true) {
+                while(!_game.gameEnded() && !_paused) {
                     _game.updateState();
                     redraw();
 
@@ -52,6 +49,10 @@ public class GameView extends android.support.constraint.ConstraintLayout {
                         e.printStackTrace();
                     }
                 }
+
+                //game ended
+                //cleanup music
+                _myMusicRunnable.stopMusic();
             }
         }).start();
 
@@ -75,6 +76,26 @@ public class GameView extends android.support.constraint.ConstraintLayout {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         _game.draw(canvas);
+    }
+
+
+    public void onPause() {
+        _paused=true;
+        _myMusicRunnable.stopMusic();
+    }
+
+    public void onResume() {
+        _paused=false;
+        initMusicThread();
+        initGameThread();
+    }
+
+    public void onDestroy() {
+
+    }
+
+    public void onCreate() {
+        _game=new Game(getContext(),this);
     }
 }
 

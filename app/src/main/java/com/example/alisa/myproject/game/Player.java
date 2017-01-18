@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +18,7 @@ import static android.R.attr.bitmap;
  */
 
 public class Player extends GameObject{
+    private static final long MAX_TIME_TO_BE_INVINCIBLE_MILLI = 1000 * 2;
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
 
         @Override
@@ -36,6 +38,8 @@ Log.d("touch","On touch");
 
     };
     private int lifePoints;
+    private boolean _isInvincible;
+    private long _isInvincibleStartedMilli;
 
     public int getLifePoints(){
         return lifePoints;
@@ -43,6 +47,8 @@ Log.d("touch","On touch");
     public Player(Context context, View view, Game game, Point location) {
         super(context, view, game, location);
         lifePoints=3;
+        _isInvincible=false;
+        _isInvincibleStartedMilli=0;
         view.setOnTouchListener(touchListener);
     }
 
@@ -78,7 +84,13 @@ Log.d("touch","On touch");
 
     @Override
     public void updateState() {
-
+        //if player is invincible (cannot be hit
+        if(_isInvincible){
+            //check the time until invincible is over
+            if(System.currentTimeMillis()-_isInvincibleStartedMilli > MAX_TIME_TO_BE_INVINCIBLE_MILLI){
+                _isInvincible=false;
+            }
+        }
     }
 
     @Override
@@ -91,6 +103,14 @@ Log.d("touch","On touch");
     }
 
     public void decreaseLife(int numOfLifePoints) {
+        if (_isInvincible){
+            return;
+        }
+
+        _isInvincible=true;
+        _isInvincibleStartedMilli= System.currentTimeMillis();
         lifePoints=lifePoints-numOfLifePoints;
+
+        Log.i(getClass().getName(),"player hit,ouch! life points: "+getLifePoints());
     }
 }

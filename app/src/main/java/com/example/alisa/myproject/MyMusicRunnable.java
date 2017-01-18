@@ -2,12 +2,11 @@ package com.example.alisa.myproject;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
+import android.util.Log;
 
 import java.io.IOException;
 
- class MyMusicRunnable implements Runnable, MediaPlayer.OnCompletionListener {
+class MyMusicRunnable implements Runnable, MediaPlayer.OnCompletionListener {
     Context appContext;
 static     MediaPlayer mPlayer;
     boolean musicIsPlaying = false;
@@ -30,10 +29,44 @@ static     MediaPlayer mPlayer;
     @Override
     public void onCompletion(MediaPlayer mp) {
         // loop back - play again
-        if (musicIsPlaying && mPlayer != null) {
-            mPlayer.start();
+
+        if(isStopMusic){
+            cleanup();
+            return;
         }
+
+        loopBack();
     }
+
+     private void loopBack() {
+         try {
+
+         if (musicIsPlaying && mPlayer != null) {
+             mPlayer.start();
+         }
+         } catch (Exception e) {
+             Log.e(getClass().getName(),"play music - onCompletion",e);
+         }
+     }
+
+     //TODO: possibly need to use musicIsPlaying instead.
+     public void stopMusic(){
+         isStopMusic=true;
+         cleanup();
+     }
+
+     private void cleanup() {
+         try {
+         mPlayer.stop();
+         mPlayer.release();
+         } catch (Exception e) {
+             Log.e(getClass().getName(),"clenup",e);
+
+         }
+
+     }
+
+     boolean isStopMusic=false;
 
     /**
      * toggles the music player state
@@ -41,27 +74,51 @@ static     MediaPlayer mPlayer;
      */
     @Override
     public void run() {
-
-        if (musicIsPlaying) {
-            mPlayer.stop();
-            musicIsPlaying = false;
-        } else {
-            if (mPlayer == null) {
-                mPlayer = MediaPlayer.create(appContext,R.raw.backgroundmusic);
-                mPlayer.start();
-                mPlayer.setOnCompletionListener(this); // MediaPlayer.OnCompletionListener
-            } else {
-                try {
-                    mPlayer.prepare();
-                    mPlayer.start();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            musicIsPlaying = true;
-        }
-
+        togglePlay();
     }
 
-}
+     private void togglePlay() {
+         try {
+             if (musicIsPlaying) {
+                 stopPlay();
+             } else {
+                 startPlay();
+             }
+         } catch (Exception e) {
+             Log.e(getClass().getName(),"play music",e);
+
+         }
+     }
+
+    private void stopPlay() {
+        try {
+            mPlayer.stop();
+            musicIsPlaying = false;
+        } catch (Exception e) {
+            Log.e(getClass().getName(),"play music - stop play",e);
+        }
+    }
+
+    private void startPlay(){
+
+        try {
+            if (mPlayer == null) {
+                mPlayer=createMediaPlayer();
+            } else {
+                mPlayer.prepare();
+            }
+            mPlayer.start();
+            musicIsPlaying = true;
+        } catch (Exception e) {
+            Log.e(getClass().getName(),"play music - start play",e);
+        }
+    }
+
+    private MediaPlayer createMediaPlayer() {
+         mPlayer = MediaPlayer.create(appContext, R.raw.backgroundmusic);
+         mPlayer.setOnCompletionListener(this); // MediaPlayer.OnCompletionListener
+         return mPlayer;
+     }
+
+ }
 

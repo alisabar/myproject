@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">My Project</string>
+    <string name="title_activity_game_over">GameOverActivity</string>
 </resources>
