@@ -30,8 +30,8 @@ static     MediaPlayer mPlayer;
     public void onCompletion(MediaPlayer mp) {
         // loop back - play again
 
-        if(isStopMusic){
-            cleanup();
+        if(musicIsPlaying){
+            stopMusic();
             return;
         }
 
@@ -51,14 +51,12 @@ static     MediaPlayer mPlayer;
 
      //TODO: possibly need to use musicIsPlaying instead.
      public void stopMusic(){
-         isStopMusic=true;
-         cleanup();
+         stopPlay();
      }
 
      private void cleanup() {
          try {
          mPlayer.stop();
-         mPlayer.release();
          } catch (Exception e) {
              Log.e(getClass().getName(),"clenup",e);
 
@@ -66,7 +64,7 @@ static     MediaPlayer mPlayer;
 
      }
 
-     boolean isStopMusic=false;
+
 
     /**
      * toggles the music player state
