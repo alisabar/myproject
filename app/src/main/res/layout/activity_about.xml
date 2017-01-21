@@ -36,7 +36,15 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Beyond The Phone - by Alisa Barky Suchman and Michael Rapatsky
+        android:text="Beyond The Phone
+
+                      App Version:1.0
+
+                      Alisa Barky Suchman and Michael Rapachki
+
+                      Developed in the Introduction to Mobile Computing Course, 2017. Instructors: Dr. Amnon Dekel and Amir Uval.
+                      © 2017 - The Dept. of Software Engineering, Shenkar: Engineering. Design. Art.
+
 
     Fly around the world , avoiding the menace of the fire birds!
 

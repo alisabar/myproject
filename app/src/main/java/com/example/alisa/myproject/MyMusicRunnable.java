@@ -1,6 +1,7 @@
 package com.example.alisa.myproject;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.util.Log;
 
@@ -100,11 +101,16 @@ static     MediaPlayer mPlayer;
     private void startPlay(){
 
         try {
+            SharedPreferences sharedprep = appContext.getSharedPreferences("User_settings", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedprep.edit();
             if (mPlayer == null) {
                 mPlayer=createMediaPlayer();
             } else {
                 mPlayer.prepare();
             }
+            float bg_volume =(float)(sharedprep.getInt("background_volume", 0))/100;
+            Log.d("sound",String.valueOf(bg_volume));
+            mPlayer.setVolume(bg_volume,bg_volume);
             mPlayer.start();
             musicIsPlaying = true;
         } catch (Exception e) {
