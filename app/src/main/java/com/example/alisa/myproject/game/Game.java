@@ -11,6 +11,7 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -31,7 +32,7 @@ public class Game {
     private final List<GameObject> _ganmeObjects;
     private final BirdCreator _birdCreator;
     private final Player _player;
-    private final Bitmap _background;
+    private Bitmap _background;
     private final Paint _textPaint;
 
     public Game(Context context, View view)
@@ -53,7 +54,7 @@ public class Game {
                 ,new Point(getScreenSize().x/2-100,getScreenSize().y-1000)
         );
         _background = BitmapFactory.decodeResource(_view.getResources(), R.drawable.sky3);
-
+        _background=Bitmap.createScaledBitmap(_background,getScreenSize().x,getScreenSize().y,true);
     }
     private void drawBackgroundImage(Canvas canvas) {
         canvas.drawBitmap(_background,0,0,null);
@@ -66,6 +67,8 @@ public class Game {
     }
     public void updateState()
     {
+        Log.d(getClass().getName(),"updateState enter");
+
         if(_gameEnded){
             return;
         }
@@ -97,6 +100,9 @@ public class Game {
             //end of game
             gameOver();
         }
+
+        Log.d(getClass().getName(),"updateState exit");
+
     }
 
     private void gameOver() {
@@ -129,7 +135,7 @@ public class Game {
         try {
             String lifeString="Life:"+_player.getLifePoints();
 
-            canvas.drawText(lifeString,10,20,_textPaint);
+            canvas.drawText(lifeString,10,40,_textPaint);
         } catch (Exception e) {
             Log.e(getClass().getName(),"drawLife",e);
         }
@@ -150,6 +156,10 @@ public class Game {
 
     public  void addGameObject(GameObject gameObject) {
         _ganmeObjects.add(gameObject);
+    }
+
+    public void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        _player.onFling(e1, e2, velocityX, velocityY);
     }
 
     //API

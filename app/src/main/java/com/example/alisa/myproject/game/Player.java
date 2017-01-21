@@ -4,14 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.RectF;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.alisa.myproject.R;
-
-import static android.R.attr.bitmap;
 
 /**
  * Created by Alisa on 12/28/2016.
@@ -40,6 +37,7 @@ Log.d("touch","On touch");
     private int lifePoints;
     private boolean _isInvincible;
     private long _isInvincibleStartedMilli;
+    private long _moveUntil;
 
     public int getLifePoints(){
         return lifePoints;
@@ -49,7 +47,11 @@ Log.d("touch","On touch");
         lifePoints=3;
         _isInvincible=false;
         _isInvincibleStartedMilli=0;
-        view.setOnTouchListener(touchListener);
+        setupTouch(view);
+    }
+
+    private void setupTouch(View view) {
+       // view.setOnTouchListener(touchListener);
     }
 
     public void moveLeft()
@@ -91,6 +93,22 @@ Log.d("touch","On touch");
                 _isInvincible=false;
             }
         }
+
+        //update movement
+        updateMovement();
+    }
+
+    private void updateMovement() {
+        if(System.currentTimeMillis()<_moveUntil) {
+            RectF location = this.getLocation();
+            RectF locationBeforeMove = location;
+
+            location.offset(_moveVectorX, 0);
+
+            if (location.centerX() > _game.getScreenSize().x || location.centerX() < 0) {
+                location = locationBeforeMove;
+            }
+        }
     }
 
     @Override
@@ -113,4 +131,25 @@ Log.d("touch","On touch");
 
         Log.i(getClass().getName(),"player hit,ouch! life points: "+getLifePoints());
     }
+
+    public void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        int moveDuration=0;
+        Log.i(getClass().getName(),"onFling "+velocityX+" , "+velocityY);
+        if (Math.abs(velocityX) < 20){
+            moveDuration=1000;
+            _moveVectorX =3;
+        }else if (Math.abs(velocityX) < 50){
+            moveDuration=2000;
+            _moveVectorX =3;
+        }else {
+            moveDuration=2000;
+            _moveVectorX =6;
+        }
+
+        _moveUntil = System.currentTimeMillis() + moveDuration;
+        _moveVectorX = (velocityX>0?1:-1) * _moveVectorX;
+    }
+
+
+    int _moveVectorX =0;
 }
