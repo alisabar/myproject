@@ -32,6 +32,10 @@ public class GameOverActivity extends Activity {
     }
 
     public void goToMainMenu(View view) {
+
+        finish();
         startActivity(new Intent(this,MainActivity.class));
+
+
     }
 }
