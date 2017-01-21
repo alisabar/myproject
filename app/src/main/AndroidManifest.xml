@@ -26,6 +26,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.alisa.myproject.MainActivity" />
         </activity>
-    </application>
+      </application>
 
 </manifest>

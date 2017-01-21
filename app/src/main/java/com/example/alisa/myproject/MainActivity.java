@@ -22,4 +22,10 @@ public void PlayButton(View view){
     startActivity(i);
 
 }
+
+    public void SettingButton(View view) {
+  //      Intent i = new Intent(this,SettingsActivity.class);
+     //   startActivity(i);
+
+    }
 }

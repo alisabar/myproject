@@ -30,22 +30,22 @@
         android:id="@+id/about"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="112dp"
-        android:layout_marginStart="72dp"
+        android:layout_marginStart="40dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:background="@drawable/cloudbutton"
         />
 
     <Button
-        android:text="Tutorial"
+        android:text="Setting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Tutorial"
+        android:id="@+id/SettingButton"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="112dp"
         android:layout_marginEnd="48dp"
         app:layout_constraintRight_toRightOf="parent"
         android:background="@drawable/cloudbutton"
-        />
+        android:onClick="SettingButton" />
 
     <TextView
         android:text="BeyondThePhone"
