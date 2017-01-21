@@ -137,13 +137,13 @@ Log.d("touch","On touch");
         Log.i(getClass().getName(),"onFling "+velocityX+" , "+velocityY);
         if (Math.abs(velocityX) < 20){
             moveDuration=1000;
-            _moveVectorX =3;
+            _moveVectorX =5;
         }else if (Math.abs(velocityX) < 50){
             moveDuration=2000;
-            _moveVectorX =3;
+            _moveVectorX =6;
         }else {
             moveDuration=2000;
-            _moveVectorX =6;
+            _moveVectorX =10;
         }
 
         _moveUntil = System.currentTimeMillis() + moveDuration;
@@ -152,4 +152,16 @@ Log.d("touch","On touch");
 
 
     int _moveVectorX =0;
+
+    public void increaseLife(int i) {
+        if (_isInvincible || lifePoints>2){
+            return;
+        }
+
+        _isInvincible=true;
+        _isInvincibleStartedMilli= System.currentTimeMillis();
+        lifePoints=lifePoints+i;
+
+        Log.i(getClass().getName(),"player fell in love! life points: "+getLifePoints());
+    }
 }

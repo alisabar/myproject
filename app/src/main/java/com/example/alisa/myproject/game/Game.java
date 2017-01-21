@@ -34,8 +34,9 @@ public class Game {
     private final View _view;
     private final Context _context;
     private final List<GameObject> _ganmeObjects;
-    private final BirdCreator _birdCreator;
+    private final GameObjectCreator _birdCreator;
     private final Player _player;
+    private final LifeBonusCreator _lifeObjCreator;
     private Bitmap _background;
     private final Paint _textPaint;
 
@@ -57,6 +58,7 @@ public class Game {
         _context=context;
         _ganmeObjects = new ArrayList<GameObject>();
         _birdCreator = new BirdCreator(_context,_view,this,1000*3);
+        _lifeObjCreator= new LifeBonusCreator(_context,_view,this,1000*7);
         //
         _player=new Player(
                 _context
@@ -78,6 +80,7 @@ public class Game {
     public boolean gameEnded(){
         return _gameEnded;
     }
+
     public void updateState()
     {
         Log.d(getClass().getName(),"updateState enter");
@@ -95,7 +98,8 @@ public class Game {
             }
         }
 
-        _birdCreator.createBird();
+        _birdCreator.createObject();
+        _lifeObjCreator.createObject();
         _player.updateState();
 
         //handle collisions
@@ -104,7 +108,7 @@ public class Game {
         for (GameObject gameObj: new ArrayList<>(_ganmeObjects)) {
             // if collides
             if(playerLocation.intersect(gameObj.getLocation())){
-                collideWithObstecle();
+                gameObj.collideWithPlayer();
             }
         }
 
@@ -244,6 +248,10 @@ public class Game {
         return _levelNumber;
     }
 
+
+    public Player getPlayer() {
+        return _player;
+    }
 
     //API
 

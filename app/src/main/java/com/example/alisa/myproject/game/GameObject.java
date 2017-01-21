@@ -117,4 +117,8 @@ public abstract class GameObject  {
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
+
+    public void collideWithPlayer() {
+
+    }
 }
