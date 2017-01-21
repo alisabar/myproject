@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.alisa.myproject.game.Game;
+import com.example.alisa.myproject.game.GameManager;
 
 import static android.os.Looper.getMainLooper;
 
@@ -98,7 +99,8 @@ public class GameView extends android.support.constraint.ConstraintLayout {
     }
 
     public void onCreate() {
-        _game=new Game(getContext(),this);
+        _game= GameManager.instance().getCurrentLevel(getContext(),this);
+
     }
 
     public void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {

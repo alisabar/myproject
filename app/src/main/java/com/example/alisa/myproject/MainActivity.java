@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.alisa.myproject.game.GameManager;
+
 import java.io.Console;
 import java.io.PrintStream;
 
@@ -17,15 +19,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-public void PlayButton(View view){
-    Intent i = new Intent(this, BirdSpriteActivity.class);
-    startActivity(i);
-
-}
+    public void PlayButton(View view){
+        GameManager.instance().newGame(this);
+    }
 
     public void SettingButton(View view) {
-  //      Intent i = new Intent(this,SettingsActivity.class);
-     //   startActivity(i);
+        startActivity(new Intent(this,settings.class));
 
+    }
+
+    public void openAboutActivity(View view) {
+        startActivity(new Intent(this,About.class));
     }
 }

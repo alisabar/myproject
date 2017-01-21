@@ -1,7 +1,9 @@
 package com.example.alisa.myproject.game;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,6 +13,7 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -18,7 +21,9 @@ import com.example.alisa.myproject.GameOverActivity;
 import com.example.alisa.myproject.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Alisa on 1/7/2017.
@@ -31,8 +36,15 @@ public class Game {
     private final List<GameObject> _ganmeObjects;
     private final BirdCreator _birdCreator;
     private final Player _player;
-    private final Bitmap _background;
+    private Bitmap _background;
     private final Paint _textPaint;
+
+    private  Calendar c = Calendar.getInstance();
+    private final int start_secs= (int) TimeUnit.MILLISECONDS.toSeconds(c.getTimeInMillis());
+    private final int start_min=(int) TimeUnit.MILLISECONDS.toMinutes(c.getTimeInMillis());
+    private long _timeToEndOfLevelMilli;
+    private int _levelNumber;
+
 
     public Game(Context context, View view)
     {
@@ -53,7 +65,9 @@ public class Game {
                 ,new Point(getScreenSize().x/2-100,getScreenSize().y-1000)
         );
         _background = BitmapFactory.decodeResource(_view.getResources(), R.drawable.sky3);
-
+        _background = Bitmap.createScaledBitmap(_background,getScreenSize().x,getScreenSize().y,true);
+        _timeToEndOfLevelMilli=System.currentTimeMillis()+ 1000*60*2 /*2 minutes*/;
+        _levelNumber = 0;
     }
     private void drawBackgroundImage(Canvas canvas) {
         canvas.drawBitmap(_background,0,0,null);
@@ -66,6 +80,8 @@ public class Game {
     }
     public void updateState()
     {
+        Log.d(getClass().getName(),"updateState enter");
+
         if(_gameEnded){
             return;
         }
@@ -97,10 +113,31 @@ public class Game {
             //end of game
             gameOver();
         }
+        else if(isCompleteLevel()){
+            startNextLevel();
+        }
+
+        Log.d(getClass().getName(),"updateState exit");
+
+    }
+
+    private boolean isCompleteLevel() {
+        return System.currentTimeMillis() > _timeToEndOfLevelMilli;
+    }
+
+    private void startNextLevel() {
+        _gameEnded=true;
+
+        GameManager.instance().nextLevel(_context,_view);
     }
 
     private void gameOver() {
         _gameEnded=true;
+        saveHighScore();
+
+        //we do not want to go back t bird sprite activity
+        ((Activity)_context).finish();
+
         //go to game over screen
         _context.startActivity(new Intent(_context, GameOverActivity.class));
     }
@@ -119,17 +156,29 @@ public class Game {
 
         drawLife(canvas);
 
+        drawTimeToComplete(canvas);
+
         for (GameObject gameObj: _ganmeObjects) {
             gameObj.draw(canvas);
         }
         _player.draw(canvas);
     }
 
+    private void drawTimeToComplete(Canvas canvas) {
+        try {
+            String timeString=(_timeToEndOfLevelMilli-System.currentTimeMillis())/1000+"";
+
+            canvas.drawText(timeString,10,80,_textPaint);
+        } catch (Exception e) {
+            Log.e(getClass().getName(),"drawTimeToComplete",e);
+        }
+    }
+
     private void drawLife(Canvas canvas) {
         try {
             String lifeString="Life:"+_player.getLifePoints();
 
-            canvas.drawText(lifeString,10,20,_textPaint);
+            canvas.drawText(lifeString,10,40,_textPaint);
         } catch (Exception e) {
             Log.e(getClass().getName(),"drawLife",e);
         }
@@ -151,6 +200,49 @@ public class Game {
     public  void addGameObject(GameObject gameObject) {
         _ganmeObjects.add(gameObject);
     }
+
+
+    public void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        _player.onFling(e1, e2, velocityX, velocityY);
+    }
+
+    public void saveHighScore(){
+        try {
+            c = Calendar.getInstance();
+            int m = ((int) TimeUnit.MILLISECONDS.toMinutes(c.getTimeInMillis())) - start_min;
+            int s = ((int) TimeUnit.MILLISECONDS.toSeconds(c.getTimeInMillis())) - start_secs;
+            if (s < 0) {
+                m -= 1;
+                s = 60 + s;
+            }
+            Log.d("second", String.valueOf(s));
+
+            Log.d("min", String.valueOf(m));
+            SharedPreferences sharedprep = _context.getSharedPreferences("HighScore", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedprep.edit();
+
+            int high_m = sharedprep.getInt("minutes", 0);
+            int high_s = sharedprep.getInt("seconds", 0);
+
+            if ((m > high_m) || ((m == high_m) && (s > high_s))) {
+                high_m = m;
+                high_s = s;
+            }
+            Log.d("h_second", String.valueOf(high_s));
+
+            Log.d("h_min", String.valueOf(high_m));
+            editor.putInt("minutes", high_m);
+            editor.putInt("seconds", high_s);
+            editor.commit();
+        }catch(Exception ex){
+            Log.e(getClass().getName(),"save high score",ex);
+        }
+    }
+
+    public int get_levelNumber() {
+        return _levelNumber;
+    }
+
 
     //API
 

@@ -14,13 +14,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Start"
-        android:layout_marginStart="160dp"
+        android:layout_marginStart="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="224dp"
         android:onClick="PlayButton"
         android:background="@drawable/cloudbutton"
-        />
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <Button
@@ -29,10 +31,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/about"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="112dp"
-        android:layout_marginStart="40dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:background="@drawable/cloudbutton"
+        android:layout_marginTop="200dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/SettingButton"
+        android:layout_marginEnd="8dp"
+        android:onClick="openAboutActivity"
         />
 
     <Button
@@ -41,11 +46,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/SettingButton"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="112dp"
         android:layout_marginEnd="48dp"
         app:layout_constraintRight_toRightOf="parent"
         android:background="@drawable/cloudbutton"
-        android:onClick="SettingButton" />
+        android:onClick="SettingButton"
+        android:layout_marginTop="250dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="200dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+
+        />
 
     <TextView
         android:text="BeyondThePhone"

@@ -17,6 +17,8 @@
         </activity>
         <activity android:name=".BirdSpriteActivity" />
         <activity android:name=".SkyBackground" />
+        <activity android:name=".GameWinActivity" />
+        <activity android:name=".LevelCompleteActivity" />
         <activity
             android:name=".GameOverActivity"
             android:label="@string/title_activity_game_over"
@@ -26,6 +28,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.alisa.myproject.MainActivity" />
         </activity>
-      </application>
+        <activity android:name=".settings" />
+        <activity android:name=".About"></activity>
+    </application>
 
 </manifest>
