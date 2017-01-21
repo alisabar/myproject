@@ -21,6 +21,11 @@ public class BirdObstecale extends GameObject {
     }
 
     @Override
+    public void collideWithPlayer() {
+        _game.getPlayer().decreaseLife(1);
+    }
+
+    @Override
     protected int getNumberOfFramesInSprite() {
         return 3;
     }
