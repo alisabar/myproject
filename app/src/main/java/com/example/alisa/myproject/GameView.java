@@ -1,9 +1,12 @@
 package com.example.alisa.myproject;
 import android.os.Handler;
+import android.support.v4.view.GestureDetectorCompat;
 import android.util.Log;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.alisa.myproject.game.Game;
@@ -96,6 +99,10 @@ public class GameView extends android.support.constraint.ConstraintLayout {
 
     public void onCreate() {
         _game=new Game(getContext(),this);
+    }
+
+    public void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        _game.onFling(e1, e2, velocityX, velocityY);
     }
 }
 
