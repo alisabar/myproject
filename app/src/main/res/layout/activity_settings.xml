@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/sky3"
-    tools:context="com.example.alisa.myproject.settings">
+    tools:context="ac.shenkar.alisa.myproject.ac.shenkar.alisa.myproject.settings">
 
     <Button
         android:text="Main Menu"
