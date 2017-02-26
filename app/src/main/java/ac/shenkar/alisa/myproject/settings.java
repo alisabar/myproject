@@ -7,13 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class settings extends AppCompatActivity {
 
-    private static SeekBar seek_bar;
+    private SeekBar seek_bar;
     int progress_value;
-    Toast t;
+   TextView t;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,8 +22,10 @@ public class settings extends AppCompatActivity {
         seek_bar = (SeekBar)findViewById(R.id.seekBar);
         final SharedPreferences sharedprep = getSharedPreferences("User_settings", Context.MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedprep.edit();
-        progress_value=sharedprep.getInt("background_volume", 0);
+        t=(TextView)findViewById(R.id.seekbar_Data);
+        progress_value=sharedprep.getInt("background_volume", 100);
         seek_bar.setProgress(progress_value);
+        t.setText(progress_value+"%");
         seek_bar.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
@@ -32,13 +35,10 @@ public class settings extends AppCompatActivity {
 
                         progress_value=i;
                           t.setText(progress_value+"%");
-                        t.show();
                     }
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-                     t=Toast.makeText(settings.this,progress_value+"%",Toast.LENGTH_SHORT);
-                       t.show();
                     }
 
                     @Override

@@ -13,7 +13,7 @@ package="ac.shenkar.alisa.myproject">
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name="ac.shenkar.alisa.myproject.MainActivity" android:launchMode="singleTop">
+        <activity android:name="ac.shenkar.alisa.myproject.MainActivity" android:launchMode="singleTask">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,9 +23,9 @@ package="ac.shenkar.alisa.myproject">
         </activity>
         <activity android:name="ac.shenkar.alisa.myproject.BirdSpriteActivity" android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
-        <activity android:name="ac.shenkar.alisa.myproject.SkyBackground" android:launchMode="singleTop" />
-        <activity android:name="ac.shenkar.alisa.myproject.GameWinActivity" android:launchMode="singleTop"/>
-        <activity android:name="ac.shenkar.alisa.myproject.LevelCompleteActivity" android:launchMode="singleTop"/>
+        <activity android:name="ac.shenkar.alisa.myproject.SkyBackground" />
+        <activity android:name="ac.shenkar.alisa.myproject.GameWinActivity"/>
+        <activity android:name="ac.shenkar.alisa.myproject.LevelCompleteActivity"/>
         <activity
             android:name="ac.shenkar.alisa.myproject.GameOverActivity"
             android:label="@string/title_activity_game_over"
@@ -33,9 +33,9 @@ package="ac.shenkar.alisa.myproject">
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ac.shenkar.alisa.myproject.MainActivity" />
+                android:value="ac.shenkar.alisa.myproject.MainActivity"/>
         </activity>
-        <activity android:name="ac.shenkar.alisa.myproject.settings" />
+        <activity android:name="ac.shenkar.alisa.myproject.settings"/>
         <activity android:name="ac.shenkar.alisa.myproject.About"></activity>
         <meta-data
             android:name="io.fabric.ApiKey"

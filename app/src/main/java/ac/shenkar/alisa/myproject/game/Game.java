@@ -207,10 +207,10 @@ public class Game {
 
 
     //happens when user slides
-    public void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+ /*   public void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         _player.onFling(e1, e2, velocityX, velocityY);
     }
-
+*/
     public void saveHighScore(){
         try {
             c = Calendar.getInstance();

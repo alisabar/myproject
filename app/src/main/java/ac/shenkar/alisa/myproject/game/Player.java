@@ -16,6 +16,7 @@ import ac.shenkar.alisa.myproject.R;
 
 public class Player extends GameObject{
     private static final long MAX_TIME_TO_BE_INVINCIBLE_MILLI = 1000 * 2;
+
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
 
         @Override
@@ -132,7 +133,7 @@ Log.d("touch","On touch");
         Log.i(getClass().getName(),"player hit,ouch! life points: "+getLifePoints());
     }
 
-    public void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+  /*  public void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         int moveDuration=0;
         Log.i(getClass().getName(),"onFling "+velocityX+" , "+velocityY);
         if (Math.abs(velocityX) < 20){
@@ -149,7 +150,7 @@ Log.d("touch","On touch");
         _moveUntil = System.currentTimeMillis() + moveDuration;
         _moveVectorX = (velocityX>0?1:-1) * _moveVectorX;
     }
-
+*/
 
     int _moveVectorX =0;
 
