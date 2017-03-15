@@ -1,4 +1,4 @@
-package com.example.alisa.myproject.game;
+package ac.shenkar.alisa.myproject.game;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,7 +11,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.alisa.myproject.R;
+import ac.shenkar.alisa.myproject.R;
 
 /**
  * Created by Alisa on 12/28/2016.

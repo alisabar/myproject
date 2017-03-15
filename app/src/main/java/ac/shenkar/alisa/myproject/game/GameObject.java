@@ -1,4 +1,4 @@
-package com.example.alisa.myproject.game;
+package ac.shenkar.alisa.myproject.game;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -1,4 +1,4 @@
-package com.example.alisa.myproject;
+package ac.shenkar.alisa.myproject;
 import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.Log;
@@ -9,8 +9,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.alisa.myproject.game.Game;
-import com.example.alisa.myproject.game.GameManager;
+import ac.shenkar.alisa.myproject.game.Game;
+import ac.shenkar.alisa.myproject.game.GameManager;
 
 import static android.os.Looper.getMainLooper;
 

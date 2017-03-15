@@ -1,4 +1,4 @@
-package com.example.alisa.myproject.game;
+package ac.shenkar.alisa.myproject.game;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,8 +17,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.example.alisa.myproject.GameOverActivity;
-import com.example.alisa.myproject.R;
+import ac.shenkar.alisa.myproject.GameOverActivity;
+import ac.shenkar.alisa.myproject.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
