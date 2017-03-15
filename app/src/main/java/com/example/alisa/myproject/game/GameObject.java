@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -121,4 +122,6 @@ public abstract class GameObject  {
     public void collideWithPlayer() {
 
     }
+
+
 }

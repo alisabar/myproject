@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.util.EventLog;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -16,24 +19,8 @@ import com.example.alisa.myproject.R;
 
 public class Player extends GameObject{
     private static final long MAX_TIME_TO_BE_INVINCIBLE_MILLI = 1000 * 2;
-    private View.OnTouchListener touchListener = new View.OnTouchListener() {
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-Log.d("touch","On touch");
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                if (event.getX() > getLocation().centerX()) {
-                    move_right();
-                    return true;
-                } else if (event.getX() < getLocation().centerX()) {
-                    moveLeft();
-                    return true;
-                }
-            }
-            return false;
-        }
-
-    };
+    private boolean isPressedMoveRight=false;
+    private boolean isPressedMoveLeft=false;
     private int lifePoints;
     private boolean _isInvincible;
     private long _isInvincibleStartedMilli;
@@ -47,26 +34,41 @@ Log.d("touch","On touch");
         lifePoints=3;
         _isInvincible=false;
         _isInvincibleStartedMilli=0;
-        setupTouch(view);
+
     }
 
-    private void setupTouch(View view) {
-       // view.setOnTouchListener(touchListener);
-    }
 
     public void moveLeft()
     {
         RectF location=this.getLocation();
+        if(location.left==0)
+        {
+            return;
+        }
+
         location.offset(-10,0);
         if(location.centerX()<0)
         {
             location.offset(10,0);
+        }
+        if(location.left==0)
+        {
+
+        }
+        if(location.right==_game.getScreenSize().x)
+        {
+
         }
     }
 
     public void move_right()
     {
         RectF location=this.getLocation();
+        if(location.right==_game.getScreenSize().x)
+        {
+            return;
+        }
+
         location.offset(10,0);
         if(location.centerX()>_game.getScreenSize().x)
         {
@@ -95,7 +97,7 @@ Log.d("touch","On touch");
         }
 
         //update movement
-        updateMovement();
+     // updateMovement();
     }
 
     private void updateMovement() {
@@ -108,6 +110,14 @@ Log.d("touch","On touch");
             if (location.centerX() > _game.getScreenSize().x || location.centerX() < 0) {
                 location = locationBeforeMove;
             }
+            if(isPressedMoveLeft){
+                moveLeft();
+            }
+            if(isPressedMoveRight)
+            {
+                move_right();
+            }
+
         }
     }
 
@@ -131,6 +141,7 @@ Log.d("touch","On touch");
 
         Log.i(getClass().getName(),"player hit,ouch! life points: "+getLifePoints());
     }
+/*
 
     public void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         int moveDuration=0;
@@ -150,7 +161,7 @@ Log.d("touch","On touch");
         _moveVectorX = (velocityX>0?1:-1) * _moveVectorX;
     }
 
-
+*/
     int _moveVectorX =0;
 
     public void increaseLife(int i) {
@@ -164,4 +175,46 @@ Log.d("touch","On touch");
 
         Log.i(getClass().getName(),"player fell in love! life points: "+getLifePoints());
     }
+/*
+
+
+    public void onLongPress(MotionEvent event) {
+
+    }
+
+    public void onTouch(MotionEvent event) {
+     if( event.getAction() == MotionEvent.ACTION_UP) {
+         isPressedMoveRight=false;
+         isPressedMoveLeft=false;
+     }
+    }
+   */
+    /*
+    final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.SimpleOnGestureListener() {
+        public void onLongPress(MotionEvent e) {
+            Log.e("", "Longpress detected");
+            if (e.getX() > getLocation().centerX()) {
+                isPressedMoveRight=true;
+                move_right();
+
+
+            } else if (e.getX() < getLocation().centerX()) {
+                isPressedMoveLeft=true;
+                moveLeft();
+            }
+        }
+    });
+*/
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getX() > getLocation().centerX()) {
+            isPressedMoveRight=true;
+            move_right();
+
+
+        } else if (event.getX() < getLocation().centerX()) {
+            isPressedMoveLeft=true;
+            moveLeft();
+        }
+        return true;
+    };
 }

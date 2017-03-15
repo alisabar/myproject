@@ -103,8 +103,17 @@ public class GameView extends android.support.constraint.ConstraintLayout {
 
     }
 
-    public void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        _game.onFling(e1, e2, velocityX, velocityY);
+   // public void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+   //     _game.onFling(e1, e2, velocityX, velocityY);
+  //  }
+
+
+  //  public void onLongPress(MotionEvent e) {
+   //     _game.onLongPress(e);
+  //  }
+
+    public boolean onTouchEvent(MotionEvent event) {
+       return _game.onTouchEvent(event);
     }
 }
 

@@ -39,5 +39,6 @@ public class LifeBonusObject extends GameObject {
     @Override
     public void collideWithPlayer() {
         _game.getPlayer().increaseLife(1);
+        setAlive(false);
     }
 }

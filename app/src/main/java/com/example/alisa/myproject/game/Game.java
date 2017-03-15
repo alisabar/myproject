@@ -25,6 +25,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static android.view.KeyEvent.ACTION_DOWN;
+
 /**
  * Created by Alisa on 1/7/2017.
  */
@@ -206,11 +208,12 @@ public class Game {
     }
 
 
-    //happens when user slides
+    //happens when user slide
+    /*
     public void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         _player.onFling(e1, e2, velocityX, velocityY);
     }
-
+*/
     public void saveHighScore(){
         try {
             c = Calendar.getInstance();
@@ -253,6 +256,17 @@ public class Game {
         return _player;
     }
 
+   // public void onLongPress(MotionEvent e) {
+   //     _player.onLongPress(e);
+   // }
+
+  //  public void onTouch(MotionEvent event) {
+    //    _player.onTouch(event);
+   // }
+  public boolean onTouchEvent(MotionEvent event){
+      return _player.onTouchEvent(event);
+    //  return true;
+  }
     //API
 
 }

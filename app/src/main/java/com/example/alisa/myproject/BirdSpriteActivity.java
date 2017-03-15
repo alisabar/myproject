@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.example.alisa.myproject.R;
 
@@ -16,16 +18,17 @@ public class BirdSpriteActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bird_sprite);
         ((GameView)findViewById(R.id.gameView)).onCreate();
-        initTouch();
+       // initTouch();
 
     }
     private GestureDetectorCompat mDetector;
 
-
+/*
     private void initTouch() {
         mDetector = new GestureDetectorCompat(this, new GestureDetector.OnGestureListener() {
             @Override
             public boolean onDown(MotionEvent e) {
+
                 return true;
             }
 
@@ -44,24 +47,42 @@ public class BirdSpriteActivity extends Activity {
                 return true;
             }
 
-            @Override
-            public void onLongPress(MotionEvent e) {
+         //   @Override
+          //  public void onLongPress(MotionEvent e) {
+           //     ((GameView)findViewById(R.id.gameView)).onLongPress(e);
+          //  }
 
-            }
-
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                ((GameView)findViewById(R.id.gameView)).onFling(e1,e2,velocityX,velocityY);
-                return true;
-            }
+          //  @Override
+         //   public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+             //   ((GameView)findViewById(R.id.gameView)).onFling(e1,e2,velocityX,velocityY);
+               // return true;
+         //   }
         });
     }
+*/
 
-    @Override
+
+
     public boolean onTouchEvent(MotionEvent event){
-        this.mDetector.onTouchEvent(event);
-        return super.onTouchEvent(event);
+        View view = ((GameView)findViewById(R.id.gameView));
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+
+            public boolean onTouch (View view, MotionEvent event){
+                if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+                    Log.d("TouchTest", "Touch down");
+
+                    while (!(event.getAction() == android.view.MotionEvent.ACTION_UP)) {
+                        view.onTouchEvent(event);
+                    }
+                }
+                return false;
+
+            }
+        });
+        return false;
     }
+
 
     @Override
     protected void onPause() {
