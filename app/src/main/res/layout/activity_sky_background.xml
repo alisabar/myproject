@@ -5,7 +5,7 @@
     android:id="@+id/activity_sky_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.alisa.myproject.SkyBackground"
+    tools:context="ac.shenkar.alisa.myproject.ac.shenkar.alisa.myproject.SkyBackground"
     android:background="@drawable/sky3" >
 
     <ImageView

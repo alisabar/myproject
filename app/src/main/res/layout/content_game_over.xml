@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/sky3"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.alisa.myproject.GameOverActivity"
+    tools:context="ac.shenkar.alisa.myproject.ac.shenkar.alisa.myproject.GameOverActivity"
     tools:showIn="@layout/activity_game_over">
 
     <Button

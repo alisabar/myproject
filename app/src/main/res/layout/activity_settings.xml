@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/sky3"
-    tools:context="com.example.alisa.myproject.settings">
+    tools:context="ac.shenkar.alisa.myproject.ac.shenkar.alisa.myproject.settings">
 
     <Button
         android:text="Main Menu"
@@ -38,4 +38,18 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekbar_Data"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        app:layout_constraintHorizontal_bias="0.47" />
+
 </android.support.constraint.ConstraintLayout>

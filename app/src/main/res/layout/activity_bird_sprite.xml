@@ -5,9 +5,9 @@
     android:id="@+id/activity_bird_sprite"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.alisa.myproject.BirdSpriteActivity">
+    tools:context="ac.shenkar.alisa.myproject.ac.shenkar.alisa.myproject.BirdSpriteActivity">
 
-    <com.example.alisa.myproject.GameView
+    <ac.shenkar.alisa.myproject.GameView
         android:layout_height="0dp"
         android:layout_width="0dp"
         tools:layout_constraintTop_creator="1"
