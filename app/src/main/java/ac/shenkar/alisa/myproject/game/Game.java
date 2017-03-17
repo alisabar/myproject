@@ -25,8 +25,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static android.view.KeyEvent.ACTION_DOWN;
-
 /**
  * Created by Alisa on 1/7/2017.
  */
@@ -39,6 +37,9 @@ public class Game {
     private final GameObjectCreator _birdCreator;
     private final Player _player;
     private final LifeBonusCreator _lifeObjCreator;
+    private final PlayPauseButton _playPauseButton;
+    private final LifeBar _lifebar;
+    private int _timeToEndOfLevelSec2;
     private Bitmap _background;
     private final Paint _textPaint;
 
@@ -47,10 +48,13 @@ public class Game {
     private final int start_min=(int) TimeUnit.MILLISECONDS.toMinutes(c.getTimeInMillis());
     private long _timeToEndOfLevelMilli;
     private int _levelNumber;
+    private boolean _paused;
+    private long _lastUpdateState;
 
 
     public Game(Context context, View view)
     {
+        _lifebar=new LifeBar(context,view,this,new Point(0,0));
         _textPaint = new Paint();
         _textPaint.setColor(Color.BLACK);
         _textPaint.setTextSize(50);
@@ -71,7 +75,11 @@ public class Game {
         _background = BitmapFactory.decodeResource(_view.getResources(), R.drawable.sky3);
         _background = Bitmap.createScaledBitmap(_background,getScreenSize().x,getScreenSize().y,true);
         _timeToEndOfLevelMilli=System.currentTimeMillis()+ 1000*60*2 /*2 minutes*/;
+        _timeToEndOfLevelSec2=60*2 /*2 minutes*/;
+
         _levelNumber = 0;
+
+        _playPauseButton =new PlayPauseButton(context,view,this,new Point(getScreenSize().x-100,0));
     }
     private void drawBackgroundImage(Canvas canvas) {
         canvas.drawBitmap(_background,0,0,null);
@@ -87,7 +95,7 @@ public class Game {
     {
         Log.d(getClass().getName(),"updateState enter");
 
-        if(_gameEnded){
+        if(_gameEnded || _paused){
             return;
         }
         for (GameObject gameObj: _ganmeObjects) {
@@ -114,21 +122,40 @@ public class Game {
             }
         }
 
-        //is end game
+        //is end _game
         if (_player.getLifePoints()<=0){
-            //end of game
+            //end of _game
             gameOver();
         }
         else if(isCompleteLevel()){
             startNextLevel();
         }
 
+        computeTimeToEndLevel();
+
+
         Log.d(getClass().getName(),"updateState exit");
 
     }
 
+    private void computeTimeToEndLevel() {
+        //current time
+        long currentTime = System.currentTimeMillis();
+        if(_lastUpdateState==0){
+            _lastUpdateState=System.currentTimeMillis();
+        }
+        //last time computed
+        long timeDiffSec=(currentTime-_lastUpdateState)/1000;
+
+        if(timeDiffSec>0) {
+            _timeToEndOfLevelSec2 -= timeDiffSec;
+            _lastUpdateState = System.currentTimeMillis();
+        }
+    }
+
     private boolean isCompleteLevel() {
-        return System.currentTimeMillis() > _timeToEndOfLevelMilli;
+        return _timeToEndOfLevelSec2<=0;
+        //return System.currentTimeMillis() > _timeToEndOfLevelMilli;
     }
 
     private void startNextLevel() {
@@ -144,7 +171,7 @@ public class Game {
         //we do not want to go back t bird sprite activity
         ((Activity)_context).finish();
 
-        //go to game over screen
+        //go to _game over screen
         _context.startActivity(new Intent(_context, GameOverActivity.class));
     }
 
@@ -164,15 +191,22 @@ public class Game {
 
         drawTimeToComplete(canvas);
 
+        drawPlayPause(canvas);
+
         for (GameObject gameObj: _ganmeObjects) {
             gameObj.draw(canvas);
         }
         _player.draw(canvas);
     }
 
+    private void drawPlayPause(Canvas canvas) {
+        _playPauseButton.draw(canvas);
+
+    }
+
     private void drawTimeToComplete(Canvas canvas) {
         try {
-            String timeString=(_timeToEndOfLevelMilli-System.currentTimeMillis())/1000+"";
+            String timeString=_timeToEndOfLevelSec2+"";//(_timeToEndOfLevelMilli-System.currentTimeMillis())/1000+"";
 
             canvas.drawText(timeString,10,80,_textPaint);
         } catch (Exception e) {
@@ -181,13 +215,7 @@ public class Game {
     }
 
     private void drawLife(Canvas canvas) {
-        try {
-            String lifeString="Life:"+_player.getLifePoints();
-
-            canvas.drawText(lifeString,10,40,_textPaint);
-        } catch (Exception e) {
-            Log.e(getClass().getName(),"drawLife",e);
-        }
+        _lifebar.draw(canvas);
     }
 
     private Point _screenSize;
@@ -267,6 +295,20 @@ public class Game {
       return _player.onTouchEvent(event);
     //  return true;
   }
+
+    public boolean isPaused() {
+        return _paused;
+    }
+
+    public void togglePause(){
+        _paused=!_paused;
+        _lastUpdateState=0;
+
+    }
+
+    public void setPaused(boolean _paused) {
+        this._paused = _paused;
+    }
     //API
 
 }

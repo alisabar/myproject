@@ -1,12 +1,15 @@
 package ac.shenkar.alisa.myproject;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.GestureDetectorCompat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 
 public class BirdSpriteActivity extends Activity {
 
@@ -18,6 +21,11 @@ public class BirdSpriteActivity extends Activity {
        // initTouch();
 
     }
+    boolean isPlaying = false;
+
+
+
+
     private GestureDetectorCompat mDetector;
 
 /*
@@ -69,9 +77,9 @@ public class BirdSpriteActivity extends Activity {
                 if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
                     Log.d("TouchTest", "Touch down");
 
-                    while (!(event.getAction() == android.view.MotionEvent.ACTION_UP)) {
+                    //while (!(event.getAction() == android._view.MotionEvent.ACTION_UP)) {
                         view.onTouchEvent(event);
-                    }
+                    //}
                 }
                 return false;
 

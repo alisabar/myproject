@@ -1,4 +1,6 @@
 package ac.shenkar.alisa.myproject;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.Log;
@@ -37,6 +39,9 @@ public class GameView extends android.support.constraint.ConstraintLayout {
         _myMusicRunnable =new MyMusicRunnable(getContext());
         new Thread(_myMusicRunnable).start();
     }
+ //   Drawable playPause = getResources().getDrawable(R.drawable.playbutton);
+
+
 
     public void initGameThread(){
 
@@ -54,7 +59,7 @@ public class GameView extends android.support.constraint.ConstraintLayout {
                     }
                 }
 
-                //game ended
+                //_game ended
                 //cleanup music
                 _myMusicRunnable.stopMusic();
             }

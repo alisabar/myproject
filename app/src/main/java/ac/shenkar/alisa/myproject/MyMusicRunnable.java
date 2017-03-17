@@ -11,8 +11,8 @@ static     MediaPlayer mPlayer;
     boolean musicIsPlaying = false;
 
     public MyMusicRunnable(Context c) {
-        // be careful not to leak the activity context.
-        // can keep the app context instead.
+        // be careful not to leak the activity _context.
+        // can keep the app _context instead.
         appContext = c.getApplicationContext();
     }
 

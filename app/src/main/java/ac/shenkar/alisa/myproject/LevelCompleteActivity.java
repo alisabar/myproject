@@ -23,11 +23,11 @@ public class LevelCompleteActivity extends Activity{
 
                 finish();
 
-                //if game manager has next level - go to next level
+                //if _game manager has next level - go to next level
                 if(!GameManager.instance().isWin()){
                     startActivity(new Intent(LevelCompleteActivity.this, BirdSpriteActivity.class));
                 }else{
-                    // otherwise - open game success
+                    // otherwise - open _game success
                     startActivity(new Intent(LevelCompleteActivity.this, GameWinActivity.class));
                 }
             }
