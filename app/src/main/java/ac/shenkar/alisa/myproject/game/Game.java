@@ -52,6 +52,7 @@ public class Game {
     private long _lastUpdateState;
 
 
+
     public Game(Context context, View view)
     {
         _lifebar=new LifeBar(context,view,this,new Point(0,0));
@@ -80,6 +81,8 @@ public class Game {
         _levelNumber = 0;
 
         _playPauseButton =new PlayPauseButton(context,view,this,new Point(getScreenSize().x-100,0));
+
+
     }
     private void drawBackgroundImage(Canvas canvas) {
         canvas.drawBitmap(_background,0,0,null);

@@ -37,6 +37,7 @@ public abstract class GameObject  {
     protected Game _game;
     //private Bitmap smallBirdSprite;
 
+
     private boolean alive;
 
 
