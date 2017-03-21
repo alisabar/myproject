@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Game {
 
+    Bitmap feathersBitmap;
     private final View _view;
     private final Context _context;
     private final List<GameObject> _ganmeObjects;
@@ -118,7 +119,9 @@ public class Game {
         for (GameObject gameObj: new ArrayList<>(_ganmeObjects)) {
             // if collides
             if(playerLocation.intersect(gameObj.getLocation())){
+
                 gameObj.collideWithPlayer();
+
             }
         }
 
@@ -175,9 +178,9 @@ public class Game {
         _context.startActivity(new Intent(_context, GameOverActivity.class));
     }
 
-    private void collideWithObstecle() {
-        _player.decreaseLife(1);
-    }
+ //   private void collideWithObstecle() {
+ //       _player.decreaseLife(1);
+ //   }
 
 
     public void draw(Canvas canvas)

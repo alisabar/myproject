@@ -37,6 +37,11 @@ public class Player extends GameObject{
 
     }
 
+    @Override
+    protected Bitmap getFeatherBitmap() {
+        return null;
+    }
+
 
     public void moveLeft()
     {
@@ -98,6 +103,11 @@ public class Player extends GameObject{
 
         //update movement
      // updateMovement();
+    }
+
+    @Override
+    void collideWithPlayer() {
+
     }
 
     private void updateMovement() {

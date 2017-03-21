@@ -1,6 +1,7 @@
 package ac.shenkar.alisa.myproject.game;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.view.View;
 
@@ -13,6 +14,11 @@ import ac.shenkar.alisa.myproject.R;
 public class LifeBonusObject extends GameObject {
     public LifeBonusObject(Context context, View view, Game game, Point location) {
         super(context, view, game, location);
+    }
+
+    @Override
+    protected Bitmap getFeatherBitmap() {
+        return null;
     }
 
     @Override
@@ -41,4 +47,5 @@ public class LifeBonusObject extends GameObject {
         _game.getPlayer().increaseLife(1);
         setAlive(false);
     }
+
 }

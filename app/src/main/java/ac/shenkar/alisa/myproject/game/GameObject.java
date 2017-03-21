@@ -36,7 +36,7 @@ public abstract class GameObject  {
     protected final Context _context;
     protected Game _game;
     //private Bitmap smallBirdSprite;
-
+    boolean  was_colision;
     private boolean alive;
 
 
@@ -83,7 +83,7 @@ public abstract class GameObject  {
                 mCharHeight));
 
     }
-
+    protected abstract Bitmap getFeatherBitmap();
     protected Bitmap createSmallBitmap(Bitmap spritesBitmap)
     {
         return spritesBitmap;
@@ -119,9 +119,9 @@ public abstract class GameObject  {
         this.alive = alive;
     }
 
-    public void collideWithPlayer() {
+    abstract void collideWithPlayer();
 
-    }
+
 
 
 }
