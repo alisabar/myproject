@@ -21,7 +21,7 @@ public class GameOverActivity extends Activity {
         int high_m= sharedprep.getInt("minutes",0);
         int high_s= sharedprep.getInt("seconds",0);
 
-        score.setText(String.valueOf(high_m)+ "."+String.valueOf(high_s));
+        score.setText(String.valueOf(high_m)+ " minutes and "+String.valueOf(high_s)+" seconds");
     }
 
     public void goToMainMenu(View view) {
