@@ -57,8 +57,8 @@ class MySFxRunnable implements Runnable {
              * them
              */
             soundsMap.put(R.raw.collected, soundPool.load(appContext, R.raw.collected, 1));
-       //     soundsMap.put(R.raw.doorbell_start, soundPool.load(appContext, R.raw.doorbell_start, 1));
-        //    soundsMap.put(R.raw.doorbell_end, soundPool.load(appContext, R.raw.doorbell_end, 1));
+           soundsMap.put(R.raw.birdcry, soundPool.load(appContext, R.raw.birdcry, 1));
+            soundsMap.put(R.raw.pause, soundPool.load(appContext, R.raw.pause, 1));
         //    soundsMap.put(R.raw.door_knock, soundPool.load(appContext, R.raw.door_knock, 1));
         //    soundsMap.put(R.raw.door_lock, soundPool.load(appContext, R.raw.door_lock, 1));
 

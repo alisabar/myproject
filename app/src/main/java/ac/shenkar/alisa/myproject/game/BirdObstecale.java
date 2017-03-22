@@ -21,8 +21,14 @@ public class BirdObstecale extends GameObject {
     int directionY=10;
     Bitmap featherBitmap;
 
+    MySFxRunnable sfx;
+    private  Thread t;
+
     public BirdObstecale(Context context, View view,Game game, Point location) {
         super(context, view,game, location);
+        sfx= new MySFxRunnable(context);
+        t=new Thread(sfx);
+        t.start();
     }
 
     @Override
@@ -33,6 +39,7 @@ public class BirdObstecale extends GameObject {
     public void draw(Canvas canvas){
         try {
             if (was_colision ) {
+                sfx.play(R.raw.birdcry);
                 if (k!=0){
                 featherBitmap = getFeatherBitmap();
                 k = (k + 1) % featherFrame.length;
@@ -42,8 +49,10 @@ public class BirdObstecale extends GameObject {
                 {
 
                     was_colision = false;
+
                     _game.getPlayer().decreaseLife(1);
                     setAlive(false);
+                    stopThread();
                 }
 
             } else{
@@ -73,6 +82,7 @@ public class BirdObstecale extends GameObject {
 
         Point screenSize = _game.getScreenSize();
         if(getLocation().centerY() >  screenSize.y){
+            stopThread();
             setAlive(false);
         }
     }
@@ -96,4 +106,12 @@ public class BirdObstecale extends GameObject {
     public Bitmap getFeatherBitmap() {
         return createFeatherBitmap();
     }
+
+    public void stopThread(){
+        if(t!=null){
+            t.interrupt();
+            t=null;
+        }
+    }
+
 }
