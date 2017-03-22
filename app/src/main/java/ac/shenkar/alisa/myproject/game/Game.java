@@ -167,7 +167,7 @@ catch(Exception ex){
 
     private void startNextLevel() {
         _gameEnded=true;
-
+        saveHighScore();
         GameManager.instance().nextLevel(_context,_view);
     }
 
@@ -251,31 +251,12 @@ catch(Exception ex){
 */
     public void saveHighScore(){
         try {
-            c = Calendar.getInstance();
-            int m = ((int) TimeUnit.MILLISECONDS.toMinutes(c.getTimeInMillis())) - start_min;
-            int s = ((int) TimeUnit.MILLISECONDS.toSeconds(c.getTimeInMillis())) - start_secs;
-            if (s < 0) {
-                m -= 1;
-                s = 60 + s;
-            }
-            Log.d("second", String.valueOf(s));
 
-            Log.d("min", String.valueOf(m));
-            SharedPreferences sharedprep = _context.getSharedPreferences("HighScore", Context.MODE_PRIVATE);
+            SharedPreferences sharedprep = _context.getSharedPreferences("level info", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedprep.edit();
 
-            int high_m = sharedprep.getInt("minutes", 0);
-            int high_s = sharedprep.getInt("seconds", 0);
-
-            if ((m > high_m) || ((m == high_m) && (s > high_s))) {
-                high_m = m;
-                high_s = s;
-            }
-            Log.d("h_second", String.valueOf(high_s));
-
-            Log.d("h_min", String.valueOf(high_m));
-            editor.putInt("minutes", high_m);
-            editor.putInt("seconds", high_s);
+            editor.putInt("life remained", _player.getLifePoints());
+           // editor.putInt("seconds", high_s);
             editor.commit();
         }catch(Exception ex){
             Log.e(getClass().getName(),"save high score",ex);

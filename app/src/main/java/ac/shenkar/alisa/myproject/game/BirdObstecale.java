@@ -43,6 +43,7 @@ public class BirdObstecale extends GameObject {
         try {
 
             if (was_colision ) {
+                sfx.play(R.raw.birdcry);
                 drawCollision(canvas);
             } else{
                 super.draw(canvas);
@@ -94,7 +95,7 @@ public class BirdObstecale extends GameObject {
 
     private void updateStateOutOfScreen(Point screenSize) {
         if(getLocation().centerY() >  screenSize.y){
-            //stopMusicThread();
+            stopMusicThread();
             setAlive(false);
         }
     }
