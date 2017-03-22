@@ -29,6 +29,7 @@ public class BirdObstecale extends GameObject {
         sfx= new MySFxRunnable(context);
         t=new Thread(sfx);
         t.start();
+        featherBitmap=createFeatherBitmap();
     }
 
     @Override
@@ -36,25 +37,13 @@ public class BirdObstecale extends GameObject {
         was_colision=true;
 
     }
+
+
     public void draw(Canvas canvas){
         try {
+
             if (was_colision ) {
-                sfx.play(R.raw.birdcry);
-                if (k!=0){
-                featherBitmap = getFeatherBitmap();
-                k = (k + 1) % featherFrame.length;
-                canvas.drawBitmap(featherBitmap, featherFrame[k], getLocation(), null);
-                 }
-                if(k==0)
-                {
-
-                    was_colision = false;
-
-                    _game.getPlayer().decreaseLife(1);
-                    setAlive(false);
-                    stopThread();
-                }
-
+                drawCollision(canvas);
             } else{
                 super.draw(canvas);
             }
@@ -62,10 +51,19 @@ public class BirdObstecale extends GameObject {
         }
         catch (Exception e)
         {
-            Log.e("Bird obstacle draw didnt succed",e.getMessage());
-
+            Log.e(
+                    "birdGame" + getClass().getName()
+                    ,"Bird obstacle draw didnt succed "+e.getMessage(),e);
         }
     }
+
+    private void drawCollision(Canvas canvas) {
+        int save = canvas.save();
+        canvas.scale(1.3f, 1.3f, getLocation().centerX(), getLocation().centerY());
+        canvas.drawBitmap(featherBitmap, featherFrame[0], getLocation(), null);
+        canvas.restoreToCount(save);
+    }
+
     @Override
     protected int getNumberOfFramesInSprite() {
         return 3;
@@ -81,11 +79,26 @@ public class BirdObstecale extends GameObject {
         getLocation().offset(0,directionY);
 
         Point screenSize = _game.getScreenSize();
+        updateStateOutOfScreen(screenSize);
+        updateStateHitPlayer();
+    }
+
+    private void updateStateHitPlayer() {
+        if(was_colision){
+            if(k++>10){
+                setAlive(false);
+                _game.getPlayer().decreaseLife(1);
+            }
+        }
+    }
+
+    private void updateStateOutOfScreen(Point screenSize) {
         if(getLocation().centerY() >  screenSize.y){
-            stopThread();
+            //stopMusicThread();
             setAlive(false);
         }
     }
+
     @Override
     protected Bitmap createSmallBitmap(Bitmap bitmap){
         double ratio = spritesBitmap.getHeight()/(float)spritesBitmap.getWidth();
@@ -94,8 +107,8 @@ public class BirdObstecale extends GameObject {
         return Bitmap.createScaledBitmap(spritesBitmap, smallWidth, smallHeight, false);
 
     }
-    public Bitmap createFeatherBitmap(){
-        featherBitmap = BitmapFactory.decodeResource(_view.getResources(), R.drawable.bbb);
+    private Bitmap createFeatherBitmap(){
+        Bitmap featherBitmap = BitmapFactory.decodeResource(_view.getResources(), R.drawable.bbb);
         double ratio2 = featherBitmap.getHeight()/(float)featherBitmap.getWidth();
         int largeWidth=4000;
         int largeHeight = (int)(largeWidth*ratio2);
@@ -104,10 +117,10 @@ public class BirdObstecale extends GameObject {
     }
 
     public Bitmap getFeatherBitmap() {
-        return createFeatherBitmap();
+        return featherBitmap;
     }
 
-    public void stopThread(){
+    public void stopMusicThread(){
         if(t!=null){
             t.interrupt();
             t=null;

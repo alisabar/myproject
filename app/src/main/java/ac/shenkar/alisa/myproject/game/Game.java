@@ -94,54 +94,55 @@ public class Game {
     public boolean gameEnded(){
         return _gameEnded;
     }
-
     public void updateState()
     {
-        Log.d(getClass().getName(),"updateState enter");
+        //Log.d(getClass().getName(),"updateState enter");
+try {
+    if (_gameEnded || _paused) {
+        return;
+    }
+    for (GameObject gameObj : _ganmeObjects) {
+        gameObj.updateState();
+    }
 
-        if(_gameEnded || _paused){
-            return;
+    for (GameObject gameObj : new ArrayList<>(_ganmeObjects)) {
+        if (!gameObj.isAlive()) {
+            _ganmeObjects.remove(gameObj);
         }
-        for (GameObject gameObj: _ganmeObjects) {
-            gameObj.updateState();
+    }
+
+    _birdCreator.createObject();
+    _lifeObjCreator.createObject();
+    _player.updateState();
+
+    //handle collisions
+    RectF playerLocation = new RectF(_player.getLocation());
+
+    for (GameObject gameObj : new ArrayList<>(_ganmeObjects)) {
+        // if collides
+        if (playerLocation.intersect(gameObj.getLocation())) {
+
+            gameObj.collideWithPlayer();
+
         }
+    }
 
-        for (GameObject gameObj: new ArrayList<>(_ganmeObjects)) {
-            if(!gameObj.isAlive()){
-                _ganmeObjects.remove(gameObj);
-            }
-        }
+    //is end _game
+    if (_player.getLifePoints() <= 0) {
+        //end of _game
+        gameOver();
+    } else if (isCompleteLevel()) {
+        startNextLevel();
+    }
 
-        _birdCreator.createObject();
-        _lifeObjCreator.createObject();
-        _player.updateState();
-
-        //handle collisions
-        RectF playerLocation= new RectF(_player.getLocation());
-
-        for (GameObject gameObj: new ArrayList<>(_ganmeObjects)) {
-            // if collides
-            if(playerLocation.intersect(gameObj.getLocation())){
-
-                gameObj.collideWithPlayer();
-
-            }
-        }
-
-        //is end _game
-        if (_player.getLifePoints()<=0){
-            //end of _game
-            gameOver();
-        }
-        else if(isCompleteLevel()){
-            startNextLevel();
-        }
-
-        computeTimeToEndLevel();
+    computeTimeToEndLevel();
 
 
-        Log.d(getClass().getName(),"updateState exit");
-
+    //Log.d(getClass().getName(),"updateState exit");
+}
+catch(Exception ex){
+    Log.e("birdGame" + getClass().getName(),"update state "+ex.getMessage(),ex);
+}
     }
 
     private void computeTimeToEndLevel() {

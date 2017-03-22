@@ -3,8 +3,11 @@ package ac.shenkar.alisa.myproject.game;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.SoundPool;
+import android.util.Log;
 import android.util.SparseIntArray;
 
+
+import java.util.logging.Logger;
 
 import ac.shenkar.alisa.myproject.R;
 
@@ -38,31 +41,33 @@ class MySFxRunnable implements Runnable {
          */
         @Override
         public void run() {
+try {
+    soundPool = soundBuild.build();
 
-            soundPool=soundBuild.build();
+    /**
+     * a callback when prepared -- we need to prevent playing before prepared
+     */
+    soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+        @Override
+        public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+            prepared = true;
+        }
+    });
 
-            /**
-             * a callback when prepared -- we need to prevent playing before prepared
-             */
-            soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
-                @Override
-                public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-                    prepared = true;
-                }
-            });
+    /**
+     * the load() returns a stream id that can be used to play the sound.
+     * I use the "R.raw.xyz" integer as key, because it's useless to invent new keys for
+     * them
+     */
+    soundsMap.put(R.raw.collected, soundPool.load(appContext, R.raw.collected, 1));
+    soundsMap.put(R.raw.birdcry, soundPool.load(appContext, R.raw.birdcry, 1));
+    soundsMap.put(R.raw.pause, soundPool.load(appContext, R.raw.pause, 1));
+    //    soundsMap.put(R.raw.door_knock, soundPool.load(appContext, R.raw.door_knock, 1));
+    //    soundsMap.put(R.raw.door_lock, soundPool.load(appContext, R.raw.door_lock, 1));
 
-            /**
-             * the load() returns a stream id that can be used to play the sound.
-             * I use the "R.raw.xyz" integer as key, because it's useless to invent new keys for
-             * them
-             */
-            soundsMap.put(R.raw.collected, soundPool.load(appContext, R.raw.collected, 1));
-           soundsMap.put(R.raw.birdcry, soundPool.load(appContext, R.raw.birdcry, 1));
-            soundsMap.put(R.raw.pause, soundPool.load(appContext, R.raw.pause, 1));
-        //    soundsMap.put(R.raw.door_knock, soundPool.load(appContext, R.raw.door_knock, 1));
-        //    soundsMap.put(R.raw.door_lock, soundPool.load(appContext, R.raw.door_lock, 1));
-
-
+    }catch(Exception ex) {
+        Log.e("birdGame" + getClass().getName(), "soundfx failed", ex);
+    }
         }
 
         public void play(int soundKey) {
