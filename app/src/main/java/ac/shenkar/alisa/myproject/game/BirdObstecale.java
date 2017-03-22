@@ -40,9 +40,10 @@ public class BirdObstecale extends GameObject {
                  }
                 if(k==0)
                 {
-                    setAlive(false);
+
                     was_colision = false;
                     _game.getPlayer().decreaseLife(1);
+                    setAlive(false);
                 }
 
             } else{

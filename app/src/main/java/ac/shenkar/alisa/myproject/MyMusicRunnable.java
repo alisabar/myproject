@@ -29,10 +29,10 @@ static     MediaPlayer mPlayer;
     public void onCompletion(MediaPlayer mp) {
         // loop back - play again
 
-        if(musicIsPlaying){
-            stopMusic();
-            return;
-        }
+     //   if(musicIsPlaying){
+       //     stopMusic();
+        //    return;
+     //   }
 
         loopBack();
     }

@@ -35,8 +35,8 @@ package="ac.shenkar.alisa.myproject">
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ac.shenkar.alisa.myproject.MainActivity"/>
         </activity>
-        <activity android:name="ac.shenkar.alisa.myproject.settings"/>
-        <activity android:name="ac.shenkar.alisa.myproject.About"></activity>
+        <activity android:name="ac.shenkar.alisa.myproject.settings"  android:launchMode="singleTop"/>
+        <activity android:name="ac.shenkar.alisa.myproject.About"  android:launchMode="singleTop"></activity>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="20fa071663486280fec57cb05c35f49ee3c680ba"
