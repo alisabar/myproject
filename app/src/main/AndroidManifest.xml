@@ -9,7 +9,7 @@ package="ac.shenkar.alisa.myproject">
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/bird1"
+        android:icon="@drawable/airplane"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">

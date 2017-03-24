@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
 import ac.shenkar.alisa.myproject.game.GameManager;
 
 /**
@@ -29,10 +30,8 @@ public class LevelCompleteActivity extends Activity{
         int life= sharedprep.getInt("life remained",0);
 
         TextView final_score=(TextView)findViewById(R.id.score);
-
         final_score.setText("your score is "+life);
-
-        findViewById(R.id.btnClickToContinue).setOnClickListener(new View.OnClickListener() {
+        (findViewById(R.id.btnClickToContinue)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //go to next level
