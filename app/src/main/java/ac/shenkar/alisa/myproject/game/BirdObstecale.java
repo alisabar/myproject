@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 import android.view.View;
 
@@ -19,7 +20,6 @@ import ac.shenkar.alisa.myproject.sound.SoundManager;
 
 public class BirdObstecale extends GameObject {
     int k=1;
-    Rect[] featherFrame = new Rect[4];
     int directionY=10;
     Bitmap featherBitmap;
 
@@ -61,10 +61,11 @@ public class BirdObstecale extends GameObject {
     }
 
     private void drawCollision(Canvas canvas) {
-        int save = canvas.save();
-        canvas.scale(1.3f, 1.3f, getLocation().centerX(), getLocation().centerY());
-        canvas.drawBitmap(featherBitmap, featherFrame[0], getLocation(), null);
-        canvas.restoreToCount(save);
+        //int save = canvas.save();
+        //canvas.scale(1.3f, 1.3f, getLocation().centerX(), getLocation().centerY());
+        RectF location = getLocation();
+        canvas.drawBitmap(featherBitmap,location.left,location.top, null);
+        //canvas.restoreToCount(save);
     }
 
     @Override
@@ -118,7 +119,7 @@ public class BirdObstecale extends GameObject {
     private Bitmap createFeatherBitmap(){
         Bitmap featherBitmap = BitmapFactory.decodeResource(_view.getResources(), R.drawable.bbb);
         double ratio2 = featherBitmap.getHeight()/(float)featherBitmap.getWidth();
-        int largeWidth=4000;
+        int largeWidth=400;
         int largeHeight = (int)(largeWidth*ratio2);
         return Bitmap.createScaledBitmap(featherBitmap, largeWidth, largeHeight, false);
     }
