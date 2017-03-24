@@ -72,7 +72,6 @@ public class SoundManager {
             return isEffect;
         }
         SharedPreferences sharedprep = getUser_settings();
-
         isEffect=sharedprep.getBoolean("effects", true);
         isEffectLoaded=true;
         return isEffect;
@@ -99,7 +98,7 @@ public class SoundManager {
                 return;
             }
             if (isLoadedSound(soundResId)) {
-                return;
+                playSound(loadedSoundsIds.get(soundResId,NO_FOUND_KEY ));
             }
 
             resToSoundMap.append(soundResId
