@@ -37,12 +37,6 @@ public class Player extends GameObject{
 
     }
 
-    @Override
-    protected Bitmap getFeatherBitmap() {
-        return null;
-    }
-
-
     public void moveLeft()
     {
         RectF location=this.getLocation();

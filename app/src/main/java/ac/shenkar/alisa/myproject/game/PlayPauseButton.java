@@ -21,8 +21,8 @@ import ac.shenkar.alisa.myproject.R;
 public class PlayPauseButton extends GameUI {
     private Bitmap _pauseButtonImage;
     private Bitmap _playButtonImage;
-    MySFxRunnable sfx;
-    private  Thread t;
+    //MySFxRunnable sfx;
+    //private  Thread t;
 
 
     public PlayPauseButton(Context context, View view, Game game, Point location) {
@@ -34,9 +34,9 @@ public class PlayPauseButton extends GameUI {
 
         _pauseButtonImage= BitmapFactory.decodeResource(_view.getResources(), R.drawable.pausebutton);
         _pauseButtonImage= Bitmap.createScaledBitmap(_pauseButtonImage,_size.x,_size.y,true);
-        sfx= new MySFxRunnable(context);
-        t=new Thread(sfx);
-        t.start();
+        //sfx= new MySFxRunnable(context);
+        //t=new Thread(sfx);
+        //t.start();
     }
 
     @NonNull
@@ -60,7 +60,7 @@ public class PlayPauseButton extends GameUI {
 
     protected void onCLick()
     {
-      sfx.play(R.raw.pause);
+      //sfx.play(R.raw.pause);
         _game.togglePause();
     }
 

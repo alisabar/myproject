@@ -21,50 +21,8 @@ public class BirdSpriteActivity extends Activity {
        // initTouch();
 
     }
-    boolean isPlaying = false;
-
-
-
 
     private GestureDetectorCompat mDetector;
-
-/*
-    private void initTouch() {
-        mDetector = new GestureDetectorCompat(this, new GestureDetector.OnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent e) {
-
-                return true;
-            }
-
-            @Override
-            public void onShowPress(MotionEvent e) {
-
-            }
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                return true;
-            }
-
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                return true;
-            }
-
-         //   @Override
-          //  public void onLongPress(MotionEvent e) {
-           //     ((GameView)findViewById(R.id.gameView)).onLongPress(e);
-          //  }
-
-          //  @Override
-         //   public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-             //   ((GameView)findViewById(R.id.gameView)).onFling(e1,e2,velocityX,velocityY);
-               // return true;
-         //   }
-        });
-    }
-*/
 
 
 

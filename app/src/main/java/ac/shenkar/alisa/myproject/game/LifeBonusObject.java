@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.view.View;
 
 import ac.shenkar.alisa.myproject.R;
+import ac.shenkar.alisa.myproject.sound.SoundManager;
 
 /**
  * Created by Alisa on 1/21/2017.
@@ -14,22 +15,14 @@ import ac.shenkar.alisa.myproject.R;
 public class LifeBonusObject extends GameObject {
 
 
-    private MySFxRunnable _MySfxRunnable;
-    private  Thread t;
+    //private MySFxRunnable _MySfxRunnable;
+    //private  Thread t;
 
     public LifeBonusObject(Context context, View view, Game game, Point location) {
         super(context, view, game, location);
 
-        _MySfxRunnable=new MySFxRunnable(context);
-        t=new Thread(_MySfxRunnable);
-        t.start();
-
     }
 
-    @Override
-    protected Bitmap getFeatherBitmap() {
-        return null;
-    }
 
     @Override
     protected int getNumberOfFramesInSprite() {
@@ -48,24 +41,16 @@ public class LifeBonusObject extends GameObject {
 
         Point screenSize = _game.getScreenSize();
         if(getLocation().centerY() >  screenSize.y){
-       //     _MySfxRunnable.play(R.raw.collected);
             setAlive(false);
-            stopThread();
         }
     }
 
     @Override
     public void collideWithPlayer() {
         _game.getPlayer().increaseLife(1);
-        _MySfxRunnable.play(R.raw.collected);
+        SoundManager.Instance(_context).playSound(R.raw.collected);
+        //_MySfxRunnable.play(R.raw.collected);
         setAlive(false);
-        stopThread();
-    }
-    public void stopThread(){
-        if(t!=null){
-           t.interrupt();
-           t=null;
-        }
     }
 
 }

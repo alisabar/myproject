@@ -7,8 +7,6 @@ import android.util.Log;
 import android.util.SparseIntArray;
 
 
-import java.util.logging.Logger;
-
 import ac.shenkar.alisa.myproject.R;
 
 /**
@@ -17,7 +15,7 @@ import ac.shenkar.alisa.myproject.R;
 class MySFxRunnable implements Runnable {
         Context appContext;
         SoundPool soundPool;
-        SoundPool.Builder soundBuild;
+        SoundPool.Builder soundBuilder;
         /**
          * like a hash map, but more efficient
          */
@@ -28,11 +26,7 @@ class MySFxRunnable implements Runnable {
             // be careful not to leak the activity context.
             // can keep the app context instead.
             appContext = c.getApplicationContext();
-            soundBuild= new SoundPool.Builder();
-
-            // init this object on a user thread.
-            // The rest of the use of this class can be on the UI thread
-    //        AsyncHandler.post(this);
+            soundBuilder = new SoundPool.Builder();
         }
 
         /**
@@ -41,8 +35,8 @@ class MySFxRunnable implements Runnable {
          */
         @Override
         public void run() {
-try {
-    soundPool = soundBuild.build();
+    try {
+    soundPool = soundBuilder.build();
 
     /**
      * a callback when prepared -- we need to prevent playing before prepared
@@ -72,16 +66,20 @@ try {
 
         public void play(int soundKey) {
 
-            SharedPreferences sharedprep = appContext.getSharedPreferences("User_settings", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedprep.edit();
-            boolean effects =(boolean) (sharedprep.getBoolean("effects", true));
             if (soundPool == null || !prepared) {
                 return;
             }
-            if(effects)
-            soundPool.play(soundsMap.get(soundKey), 1.0f, 1.0f, 2, 0, 1.0f);
+
+            if(isEffects()) {
+                soundPool.play(soundsMap.get(soundKey), 1.0f, 1.0f, 2, 0, 1.0f);
+            }
         }
+
+    private boolean isEffects() {
+        SharedPreferences sharedprep = appContext.getSharedPreferences("User_settings", Context.MODE_PRIVATE);
+        return (boolean) (sharedprep.getBoolean("effects", true));
     }
+}
 
     /**
      * This can be an independent class.

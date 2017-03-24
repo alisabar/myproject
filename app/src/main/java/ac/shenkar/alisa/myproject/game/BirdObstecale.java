@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 
 import ac.shenkar.alisa.myproject.R;
+import ac.shenkar.alisa.myproject.common.Utils;
+import ac.shenkar.alisa.myproject.sound.SoundManager;
 
 /**
  * Created by Alisa on 1/7/2017.
@@ -21,21 +23,22 @@ public class BirdObstecale extends GameObject {
     int directionY=10;
     Bitmap featherBitmap;
 
-    MySFxRunnable sfx;
-    private  Thread t;
-
     public BirdObstecale(Context context, View view,Game game, Point location) {
         super(context, view,game, location);
-        sfx= new MySFxRunnable(context);
-        t=new Thread(sfx);
-        t.start();
-        featherBitmap=createFeatherBitmap();
+
+        featherBitmap=Utils.GetOrCreate(Utils.CACHE_BIRD_FEATHER_BITMAP, new Utils.Creator<Bitmap>() {
+
+            @Override
+            public Bitmap create() {
+                return createFeatherBitmap();
+            }
+        });
     }
 
     @Override
     public void collideWithPlayer() {
         was_colision=true;
-
+        playBirdSound();
     }
 
 
@@ -43,7 +46,6 @@ public class BirdObstecale extends GameObject {
         try {
 
             if (was_colision ) {
-                sfx.play(R.raw.birdcry);
                 drawCollision(canvas);
             } else{
                 super.draw(canvas);
@@ -82,9 +84,15 @@ public class BirdObstecale extends GameObject {
         Point screenSize = _game.getScreenSize();
         updateStateOutOfScreen(screenSize);
         updateStateHitPlayer();
+
     }
 
+    private void playBirdSound() {
+        SoundManager.Instance(_context).playSound(R.raw.birdcry);
+     }
+
     private void updateStateHitPlayer() {
+
         if(was_colision){
             if(k++>10){
                 setAlive(false);
@@ -95,17 +103,16 @@ public class BirdObstecale extends GameObject {
 
     private void updateStateOutOfScreen(Point screenSize) {
         if(getLocation().centerY() >  screenSize.y){
-            stopMusicThread();
             setAlive(false);
         }
     }
 
     @Override
     protected Bitmap createSmallBitmap(Bitmap bitmap){
-        double ratio = spritesBitmap.getHeight()/(float)spritesBitmap.getWidth();
+        double ratio = bitmap.getHeight()/(float)bitmap.getWidth();
         int smallWidth=700;
         int smallHeight = (int)(smallWidth*ratio);
-        return Bitmap.createScaledBitmap(spritesBitmap, smallWidth, smallHeight, false);
+        return Bitmap.createScaledBitmap(bitmap, smallWidth, smallHeight, false);
 
     }
     private Bitmap createFeatherBitmap(){
@@ -114,18 +121,7 @@ public class BirdObstecale extends GameObject {
         int largeWidth=4000;
         int largeHeight = (int)(largeWidth*ratio2);
         return Bitmap.createScaledBitmap(featherBitmap, largeWidth, largeHeight, false);
-
     }
 
-    public Bitmap getFeatherBitmap() {
-        return featherBitmap;
-    }
-
-    public void stopMusicThread(){
-        if(t!=null){
-            t.interrupt();
-            t=null;
-        }
-    }
 
 }

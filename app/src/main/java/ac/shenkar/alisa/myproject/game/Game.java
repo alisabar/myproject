@@ -19,6 +19,8 @@ import android.view.WindowManager;
 
 import ac.shenkar.alisa.myproject.GameOverActivity;
 import ac.shenkar.alisa.myproject.R;
+import ac.shenkar.alisa.myproject.common.Utils;
+import ac.shenkar.alisa.myproject.sound.SoundManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,10 +33,12 @@ import java.util.concurrent.TimeUnit;
 
 public class Game {
 
-    Bitmap feathersBitmap;
     private final View _view;
     private final Context _context;
     private final List<GameObject> _ganmeObjects;
+    private final List<GameObject> _ganmeObjectsToAdd;
+
+
     private final GameObjectCreator _birdCreator;
     private final Player _player;
     private final LifeBonusCreator _lifeObjCreator;
@@ -47,12 +51,10 @@ public class Game {
     private  Calendar c = Calendar.getInstance();
     private final int start_secs= (int) TimeUnit.MILLISECONDS.toSeconds(c.getTimeInMillis());
     private final int start_min=(int) TimeUnit.MILLISECONDS.toMinutes(c.getTimeInMillis());
-    private long _timeToEndOfLevelMilli;
+
     private int _levelNumber;
     private boolean _paused;
     private long _lastUpdateState;
-
-
 
     public Game(Context context, View view)
     {
@@ -65,6 +67,7 @@ public class Game {
         _view =view;
         _context=context;
         _ganmeObjects = new ArrayList<GameObject>();
+        _ganmeObjectsToAdd= new ArrayList<GameObject>();
         _birdCreator = new BirdCreator(_context,_view,this,1000*3);
         _lifeObjCreator= new LifeBonusCreator(_context,_view,this,1000*7);
         //
@@ -76,15 +79,36 @@ public class Game {
         );
         _background = BitmapFactory.decodeResource(_view.getResources(), R.drawable.sky3);
         _background = Bitmap.createScaledBitmap(_background,getScreenSize().x,getScreenSize().y,true);
-        _timeToEndOfLevelMilli=System.currentTimeMillis()+ 1000*60*2 /*2 minutes*/;
         _timeToEndOfLevelSec2=60*2 /*2 minutes*/;
 
         _levelNumber = 0;
 
         _playPauseButton =new PlayPauseButton(context,view,this,new Point(getScreenSize().x-100,0));
 
+        initCreators();
+
+        SoundManager.Instance(_context);
+    }
+
+    private void initCreators() {
+
+        Utils.ThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                while(!_paused){
+                    _birdCreator.createObject();
+                    _lifeObjCreator.createObject();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Utils.logError(e,"creators thread crashed");
+                    }
+                }
+            }
+        });
 
     }
+
     private void drawBackgroundImage(Canvas canvas) {
         canvas.drawBitmap(_background,0,0,null);
     }
@@ -97,7 +121,7 @@ public class Game {
     public void updateState()
     {
         //Log.d(getClass().getName(),"updateState enter");
-try {
+    try {
     if (_gameEnded || _paused) {
         return;
     }
@@ -111,8 +135,8 @@ try {
         }
     }
 
-    _birdCreator.createObject();
-    _lifeObjCreator.createObject();
+        addItems();
+
     _player.updateState();
 
     //handle collisions
@@ -121,9 +145,7 @@ try {
     for (GameObject gameObj : new ArrayList<>(_ganmeObjects)) {
         // if collides
         if (playerLocation.intersect(gameObj.getLocation())) {
-
             gameObj.collideWithPlayer();
-
         }
     }
 
@@ -139,10 +161,17 @@ try {
 
 
     //Log.d(getClass().getName(),"updateState exit");
-}
-catch(Exception ex){
-    Log.e("birdGame" + getClass().getName(),"update state "+ex.getMessage(),ex);
-}
+    }
+    catch(Exception ex){
+        Log.e("birdGame" + getClass().getName(),"update state "+ex.getMessage(),ex);
+    }
+    }
+
+    private void addItems() {
+        synchronized (_ganmeObjects) {
+            _ganmeObjects.addAll(_ganmeObjectsToAdd);
+            _ganmeObjectsToAdd.clear();
+        }
     }
 
     private void computeTimeToEndLevel() {
@@ -239,8 +268,12 @@ catch(Exception ex){
     }
 
     public  void addGameObject(GameObject gameObject) {
-        _ganmeObjects.add(gameObject);
+        synchronized (_ganmeObjects) {
+            _ganmeObjectsToAdd.add(gameObject);
+        }
     }
+
+
 
 
     //happens when user slide
@@ -291,7 +324,10 @@ catch(Exception ex){
     public void togglePause(){
         _paused=!_paused;
         _lastUpdateState=0;
-
+        if(!_paused){
+            SoundManager.Instance(_context).playSound(R.raw.pause);
+            initCreators();
+        }
     }
 
     public void setPaused(boolean _paused) {

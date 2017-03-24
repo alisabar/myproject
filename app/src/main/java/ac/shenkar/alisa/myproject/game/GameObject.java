@@ -12,6 +12,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import ac.shenkar.alisa.myproject.common.Utils;
+
 /**
  * Created by Alisa on 12/28/2016.
  */
@@ -60,16 +62,17 @@ public abstract class GameObject  {
 
 
     private void prepareCharacter() {
-        spritesBitmap = BitmapFactory.decodeResource(_view.getResources(), getSpriteResourceId());
-        spritesBitmap=createSmallBitmap(spritesBitmap);
+        spritesBitmap = Utils.GetOrCreate("SPRITE_BITMAP_IMAGE_RESID_" + getSpriteResourceId(), new Utils.Creator<Bitmap>() {
+            @Override
+            public Bitmap create() {
+                return createSprite();
+            }
+        });
 
-        // setup the rects
 
         int frameNum= getNumberOfFramesInSprite();
-
         mCharWidth = spritesBitmap.getWidth() / frameNum;
         mCharHeight = spritesBitmap.getHeight();
-
         int i = 0; // rect index
         for (int x = 0; x < frameNum; x++) { // column
             frames[i] = new Rect(x * mCharWidth, 0, (x + 1) * mCharWidth, mCharHeight);
@@ -83,7 +86,13 @@ public abstract class GameObject  {
                 mCharHeight));
 
     }
-    protected abstract Bitmap getFeatherBitmap();
+
+    private Bitmap createSprite() {
+        Bitmap spritesBitmap = BitmapFactory.decodeResource(_view.getResources(), getSpriteResourceId());
+        spritesBitmap=createSmallBitmap(spritesBitmap);
+        return spritesBitmap;
+    }
+
     protected Bitmap createSmallBitmap(Bitmap spritesBitmap)
     {
         return spritesBitmap;
