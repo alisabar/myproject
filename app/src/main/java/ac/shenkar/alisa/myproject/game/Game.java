@@ -58,7 +58,7 @@ public class Game {
     {
         _lifebar=new LifeBar(context,view,this,new Point(0,0));
         _textPaint = new Paint();
-        _textPaint.setColor(Color.BLACK);
+        _textPaint.setColor(Color.parseColor("#1F309C"));
         _textPaint.setTextSize(50);
 
         _gameEnded=false;
@@ -108,9 +108,6 @@ public class Game {
                         }
                         _birdCreatorUpdated=System.currentTimeMillis();
                     }
-
-
-
 
                     try {
                         Thread.sleep(1000);
@@ -238,12 +235,25 @@ public class Game {
 
         drawTimeToComplete(canvas);
 
+        drawHighScore(canvas);
+
         drawPlayPause(canvas);
 
         for (GameObject gameObj: _ganmeObjects) {
             gameObj.draw(canvas);
         }
         _player.draw(canvas);
+    }
+
+    private void drawHighScore(Canvas canvas) {
+
+
+        try {
+            String drawScore= HighScore.Instance().getScore()+"";
+            canvas.drawText("Score: "+drawScore,10,280,_textPaint);
+        } catch (Exception e) {
+            Log.e(getClass().getName(),"drawHighScore",e);
+        }
     }
 
     private void drawPlayPause(Canvas canvas) {
@@ -255,7 +265,7 @@ public class Game {
         try {
             String timeString=_timeToEndOfLevelSec2+"";//(_timeToEndOfLevelMilli-System.currentTimeMillis())/1000+"";
 
-            canvas.drawText(timeString,10,80,_textPaint);
+            canvas.drawText(timeString,10,180,_textPaint);
         } catch (Exception e) {
             Log.e(getClass().getName(),"drawTimeToComplete",e);
         }

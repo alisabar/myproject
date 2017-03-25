@@ -1,15 +1,10 @@
 package ac.shenkar.alisa.myproject;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.support.v4.view.GestureDetectorCompat;
 import android.util.Log;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 
 import ac.shenkar.alisa.myproject.common.Utils;
 import ac.shenkar.alisa.myproject.game.Game;
@@ -24,6 +19,7 @@ import static android.os.Looper.getMainLooper;
 public class GameView extends android.support.constraint.ConstraintLayout {
     private MyMusicRunnable _myMusicRunnable;
     private boolean _paused;
+    private Game _game;
 
     public GameView(Context context) {
         super(context);
@@ -41,23 +37,29 @@ public class GameView extends android.support.constraint.ConstraintLayout {
         Utils.ThreadPool().execute(_myMusicRunnable);
     }
 
-    public void initGameThread(){
+    public void startGameLoopThread(){
 
         Utils.ThreadPool().execute(new Runnable() {
             @Override
             public void run() {
 
                 Game game=GameManager.instance().getCurrentLevel(getContext(), GameView.this);
-
-                while(!game.gameEnded() && !_paused) {
-                    game.updateState();
-                    redraw();
-
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                try {
+                    if(game==null){
+                        Log.wtf(Utils.LOG_TAG,"could not load game");
                     }
+                    while(!game.gameEnded() && !_paused) {
+                        game.updateState();
+                        drawGame();
+
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } catch (Exception e) {
+                    Utils.logError(e,"error during game loop");
                 }
 
                 //_game ended
@@ -68,7 +70,7 @@ public class GameView extends android.support.constraint.ConstraintLayout {
 
     }
 
-    private void redraw() {
+    private void drawGame() {
         Handler mainHandler = new Handler(getMainLooper());
         mainHandler.post(new Runnable() {
             @Override
@@ -85,38 +87,78 @@ public class GameView extends android.support.constraint.ConstraintLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        GameManager.instance().getCurrentLevel(getContext(), this).draw(canvas);
+        if(_game!=null) {
+            _game.draw(canvas);
+        }
     }
 
 
     public void onPause() {
         _paused=true;
         _myMusicRunnable.stopMusic();
-        GameManager.instance().getCurrentLevel(getContext(), this).stop();
+        _game.stop();
+        _game=null;
     }
 
     public void onResume() {
         _paused=false;
         initMusicThread();
-        initGameThread();
-        GameManager.instance().getCurrentLevel(getContext(), this).start();
+        startGameLoopThread();
+        initGameInstance();
+    }
+
+    private void initGameInstance() {
+        _game= GameManager.instance().getCurrentLevel(getContext(), this);
+        if(_game!=null) {
+            _game.start();
+        }
+        else{
+
+            //if could not get game object...
+            Log.e(Utils.LOG_TAG,"could not load game!");
+
+            //go to main menu
+            Utils.gotoMainMenu(this);
+
+        }
     }
 
     public void onDestroy() {
+        //stop current game when quiting game
+        if(_game!=null){
+            _game.stop();
+            _game=null;
+        }
 
     }
 
     public void onCreate() {
-        Game _game = GameManager.instance().getCurrentLevel(getContext(), this);
-        _game.start();
+       //nothing
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        return GameManager.instance().getCurrentLevel(getContext(), this).onTouchEvent(event);
+
+        //handle touch event , by passing touch event message to game , if game exists
+        try {
+            if(_game!=null) {
+                return _game.onTouchEvent(event);
+            }else {
+                return false;
+            }
+        } catch (Exception e) {
+            Utils.logError(e,"onTouchEvent");
+            return false;
+        }
     }
 
     public void onBackPressed() {
-        GameManager.instance().getCurrentLevel(getContext(), this).onBackPressed();
+
+        //handle back pressed event , by passing back pressed event message to game , if game exists
+
+        if(_game!=null){
+            _game.onBackPressed();
+        }
+
     }
 }
 

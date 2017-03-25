@@ -47,6 +47,11 @@ public class LifeBonusObject extends GameObject {
 
     @Override
     public void collideWithPlayer() {
+
+        if(_game.getPlayer().getLifePoints() >= Player.MAX_LIFE_POINTS ){
+            HighScore.Instance().addScore(1);
+        }
+
         _game.getPlayer().increaseLife(1);
         SoundManager.Instance(_context).playSound(R.raw.collected);
         //_MySfxRunnable.play(R.raw.collected);

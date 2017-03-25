@@ -19,6 +19,7 @@ import ac.shenkar.alisa.myproject.R;
 
 public class Player extends GameObject{
     private static final long MAX_TIME_TO_BE_INVINCIBLE_MILLI = 1000 * 2;
+    public static final int MAX_LIFE_POINTS = 2;
     private boolean isPressedMoveRight=false;
     private boolean isPressedMoveLeft=false;
     private int lifePoints;
@@ -169,7 +170,7 @@ public class Player extends GameObject{
     int _moveVectorX =0;
 
     public void increaseLife(int i) {
-        if (_isInvincible || lifePoints>2){
+        if (_isInvincible || lifePoints>MAX_LIFE_POINTS){
             return;
         }
 
@@ -210,6 +211,11 @@ public class Player extends GameObject{
     });
 */
     public boolean onTouchEvent(MotionEvent event) {
+
+        if(_game.isPaused()){
+            return true;
+        }
+
         if (event.getX() > getLocation().centerX()) {
             isPressedMoveRight=true;
             move_right();

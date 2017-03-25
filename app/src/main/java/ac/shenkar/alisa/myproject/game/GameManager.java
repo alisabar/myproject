@@ -45,32 +45,34 @@ public class GameManager {
     public void newGame(Context context){
         _currentLevelNum=0;
         _currentLevel=null;
+        HighScore.Instance().newScore();
         context.startActivity(new Intent(context,BirdSpriteActivity.class));
 
     }
 
     public Game getCurrentLevel(Context context, View view)
     {
-        //if current level is not the level we are playing now by _currentLevelNum - assign current level to null
-        if (_currentLevel!=null && _currentLevel.get_levelNumber() != _currentLevelNum){
-            _currentLevel=null;
+        synchronized (_instance) {
+
+            //if current level is not the level we are playing now by _currentLevelNum - assign current level to null
+            if (_currentLevel != null && _currentLevel.get_levelNumber() != _currentLevelNum) {
+                _currentLevel = null;
+            }
+
+            //if we already created current level -> return it.
+            if (_currentLevel != null) {
+                return _currentLevel;
+            }
+
+            //otherwise.. create level by current level number
+            else if (_currentLevelNum == 0) {
+                _currentLevel = new Game(context, view);
+                return _currentLevel;
+            }
+
+            //level not supported
+            return null;
         }
-
-        //if we already created current level -> return it.
-        if(_currentLevel!=null)
-        {
-            return _currentLevel;
-        }
-
-        //otherwise.. create level by current level number
-       else if(_currentLevelNum ==0)
-       {
-           _currentLevel=new Game(context, view);
-           return _currentLevel;
-       }
-
-        //level not supported
-       return null;
 
     }
 

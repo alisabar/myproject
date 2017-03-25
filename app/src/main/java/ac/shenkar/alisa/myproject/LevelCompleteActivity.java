@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 
 import ac.shenkar.alisa.myproject.game.GameManager;
+import ac.shenkar.alisa.myproject.game.HighScore;
 
 /**
  * Created by Alisa on 1/21/2017.
@@ -30,7 +31,10 @@ public class LevelCompleteActivity extends Activity{
         int life= sharedprep.getInt("life remained",0);
 
         TextView final_score=(TextView)findViewById(R.id.score);
-        final_score.setText("your score is "+life);
+
+        int totalScore = life+ HighScore.Instance().getScore();
+
+        final_score.setText("your score is "+totalScore);
         (findViewById(R.id.btnClickToContinue)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

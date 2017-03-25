@@ -1,12 +1,18 @@
 package ac.shenkar.alisa.myproject.common;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import ac.shenkar.alisa.myproject.GameView;
+import ac.shenkar.alisa.myproject.MainActivity;
 
 /**
  * Created by Alisa on 3/24/2017.
@@ -44,7 +50,20 @@ public class Utils {
 
     static HashMap<String,Object> cache=new HashMap<>();
 
-        public static abstract class Creator<T>{
+    public static void gotoMainMenu(View view) {
+        gotoActivity(view,MainActivity.class);
+    }
+
+    public static void gotoActivity(View view,Class<?> activityClass) {
+        //go to activity
+        view.getContext().startActivity(new Intent(view.getContext(),activityClass));
+
+        //finish this activity
+        ((Activity)view.getContext()).finish();
+
+    }
+
+    public static abstract class Creator<T>{
             public abstract T create();
         }
 }

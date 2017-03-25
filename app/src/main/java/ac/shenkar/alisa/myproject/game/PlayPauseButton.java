@@ -46,7 +46,7 @@ public class PlayPauseButton extends GameUI {
 
     public void draw(Canvas canvas)
     {
-        //todo
+
         Bitmap image;
         if(_game.isPaused()){
             image=_playButtonImage;
