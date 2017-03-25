@@ -107,7 +107,7 @@ public class SoundManager {
 
         }catch(Exception ex)
         {
-            Utils.logError(ex,"playSound");
+            Utils.logError(ex,"playSound "+soundResId);
         }
     }
 

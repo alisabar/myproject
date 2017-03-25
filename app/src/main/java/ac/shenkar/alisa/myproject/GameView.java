@@ -11,6 +11,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import ac.shenkar.alisa.myproject.common.Utils;
 import ac.shenkar.alisa.myproject.game.Game;
 import ac.shenkar.alisa.myproject.game.GameManager;
 
@@ -33,23 +34,23 @@ public class GameView extends android.support.constraint.ConstraintLayout {
 
 
     }
-    Game _game;
+    //Game _game;
 
     private void initMusicThread() {
         _myMusicRunnable =new MyMusicRunnable(getContext());
-        new Thread(_myMusicRunnable).start();
+        Utils.ThreadPool().execute(_myMusicRunnable);
     }
- //   Drawable playPause = getResources().getDrawable(R.drawable.playbutton);
-
-
 
     public void initGameThread(){
 
-        new Thread(new Runnable() {
+        Utils.ThreadPool().execute(new Runnable() {
             @Override
             public void run() {
-                while(!_game.gameEnded() && !_paused) {
-                    _game.updateState();
+
+                Game game=GameManager.instance().getCurrentLevel(getContext(), GameView.this);
+
+                while(!game.gameEnded() && !_paused) {
+                    game.updateState();
                     redraw();
 
                     try {
@@ -63,7 +64,7 @@ public class GameView extends android.support.constraint.ConstraintLayout {
                 //cleanup music
                 _myMusicRunnable.stopMusic();
             }
-        }).start();
+        });
 
     }
 
@@ -75,7 +76,7 @@ public class GameView extends android.support.constraint.ConstraintLayout {
                 try {
                     invalidate();
                 } catch (Exception ex) {
-                    Log.getStackTraceString(ex);
+                    Utils.logError(ex,"error drawing");
                 }
             }
         });
@@ -84,19 +85,21 @@ public class GameView extends android.support.constraint.ConstraintLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        _game.draw(canvas);
+        GameManager.instance().getCurrentLevel(getContext(), this).draw(canvas);
     }
 
 
     public void onPause() {
         _paused=true;
         _myMusicRunnable.stopMusic();
+        GameManager.instance().getCurrentLevel(getContext(), this).stop();
     }
 
     public void onResume() {
         _paused=false;
         initMusicThread();
         initGameThread();
+        GameManager.instance().getCurrentLevel(getContext(), this).start();
     }
 
     public void onDestroy() {
@@ -104,21 +107,16 @@ public class GameView extends android.support.constraint.ConstraintLayout {
     }
 
     public void onCreate() {
-        _game= GameManager.instance().getCurrentLevel(getContext(),this);
-
+        Game _game = GameManager.instance().getCurrentLevel(getContext(), this);
+        _game.start();
     }
 
-   // public void onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-   //     _game.onFling(e1, e2, velocityX, velocityY);
-  //  }
-
-
-  //  public void onLongPress(MotionEvent e) {
-   //     _game.onLongPress(e);
-  //  }
-
     public boolean onTouchEvent(MotionEvent event) {
-       return _game.onTouchEvent(event);
+        return GameManager.instance().getCurrentLevel(getContext(), this).onTouchEvent(event);
+    }
+
+    public void onBackPressed() {
+        GameManager.instance().getCurrentLevel(getContext(), this).onBackPressed();
     }
 }
 

@@ -17,13 +17,14 @@ public abstract class GameObjectCreator
     protected final Context _context;
     protected final View _view;
     protected final Game _game;
-    protected final long _createIntervalMilli;
+    private long _createIntervalMilli;
+
 
     public GameObjectCreator(Context context, View view, Game game, long createIntervalMilli){
-        _context = context;
+        _context = context.getApplicationContext();
         _view = view;
         _game = game;
-        _createIntervalMilli=createIntervalMilli;
+        set_createIntervalMilli(createIntervalMilli);
     }
 
     long _lastCreated;
@@ -51,7 +52,7 @@ public abstract class GameObjectCreator
     }
 
     protected boolean isTimeToCreate() {
-        return System.currentTimeMillis() - _lastCreated > _createIntervalMilli;
+        return System.currentTimeMillis() - _lastCreated > get_createIntervalMilli();
     }
 
     static Random random =new Random(System.currentTimeMillis());
@@ -69,5 +70,14 @@ public abstract class GameObjectCreator
     }
 
     static GameObject lastGameObject;
+
+
+    public long get_createIntervalMilli() {
+        return _createIntervalMilli;
+    }
+
+    public void set_createIntervalMilli(long _createIntervalMilli) {
+        this._createIntervalMilli = _createIntervalMilli;
+    }
 }
 

@@ -26,7 +26,7 @@ public class GameManager {
 
     Game _currentLevel;
 
-    public void nextLevel(Context context, View view) {
+    public void nextLevel(View view) {
 
         //set next level number
         if(_currentLevel==null){
@@ -35,10 +35,10 @@ public class GameManager {
 
         _currentLevelNum = _currentLevel.get_levelNumber()+1;
 
-        ((Activity)context).finish();
+        ((Activity)view.getContext()).finish();
 
         //start transition activity;
-        context.startActivity(new Intent(context,LevelCompleteActivity.class));
+        view.getContext().startActivity(new Intent(view.getContext(),LevelCompleteActivity.class));
 
     }
 

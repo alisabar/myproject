@@ -21,7 +21,7 @@ public abstract class GameUI {
 
     public GameUI(Context context, View view, Game game, Point location)
     {
-        this._context = context;
+        this._context = context.getApplicationContext();
         this._view = view;
         this._game = game;
         this._location = location;

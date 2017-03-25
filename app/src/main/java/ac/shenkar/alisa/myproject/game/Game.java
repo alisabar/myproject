@@ -37,8 +37,6 @@ public class Game {
     private final Context _context;
     private final List<GameObject> _ganmeObjects;
     private final List<GameObject> _ganmeObjectsToAdd;
-
-
     private final GameObjectCreator _birdCreator;
     private final Player _player;
     private final LifeBonusCreator _lifeObjCreator;
@@ -65,7 +63,7 @@ public class Game {
 
         _gameEnded=false;
         _view =view;
-        _context=context;
+        _context=context.getApplicationContext();
         _ganmeObjects = new ArrayList<GameObject>();
         _ganmeObjectsToAdd= new ArrayList<GameObject>();
         _birdCreator = new BirdCreator(_context,_view,this,1000*3);
@@ -85,8 +83,6 @@ public class Game {
 
         _playPauseButton =new PlayPauseButton(context,view,this,new Point(getScreenSize().x-100,0));
 
-        initCreators();
-
         SoundManager.Instance(_context);
     }
 
@@ -95,9 +91,27 @@ public class Game {
         Utils.ThreadPool().execute(new Runnable() {
             @Override
             public void run() {
+
+                long _birdCreatorUpdated= System.currentTimeMillis();
                 while(!_paused){
                     _birdCreator.createObject();
                     _lifeObjCreator.createObject();
+
+
+                    //decrease birds creation interval
+                    if(System.currentTimeMillis() - _birdCreatorUpdated > 1000*45){
+                        long interval = _birdCreator.get_createIntervalMilli();
+                        if(interval>1500){
+                            interval= (long)((double)interval/1.5);
+                            _birdCreator.set_createIntervalMilli(interval);
+                            Log.i(Utils.LOG_TAG, "bird creator interval is "+interval);
+                        }
+                        _birdCreatorUpdated=System.currentTimeMillis();
+                    }
+
+
+
+
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -121,50 +135,47 @@ public class Game {
     public void updateState()
     {
         //Log.d(getClass().getName(),"updateState enter");
-    try {
-    if (_gameEnded || _paused) {
-        return;
-    }
-    for (GameObject gameObj : _ganmeObjects) {
-        gameObj.updateState();
-    }
+        try {
+            if (_gameEnded || _paused) {
+                return;
+            }
+            for (GameObject gameObj : _ganmeObjects) {
+                gameObj.updateState();
+            }
 
-    for (GameObject gameObj : new ArrayList<>(_ganmeObjects)) {
-        if (!gameObj.isAlive()) {
-            _ganmeObjects.remove(gameObj);
+            for (GameObject gameObj : new ArrayList<>(_ganmeObjects)) {
+                if (!gameObj.isAlive()) {
+                    _ganmeObjects.remove(gameObj);
+                }
+            }
+
+            addItems();
+
+            _player.updateState();
+
+            //handle collisions
+            RectF playerLocation = new RectF(_player.getLocation());
+
+            for (GameObject gameObj : new ArrayList<>(_ganmeObjects)) {
+                // if collides
+                if (playerLocation.intersect(gameObj.getLocation())) {
+                    gameObj.collideWithPlayer();
+                }
+            }
+
+            //is end _game
+            if (_player.getLifePoints() <= 0) {
+                //end of _game
+                gameOver();
+            } else if (isCompleteLevel()) {
+                startNextLevel();
+            }
+
+            computeTimeToEndLevel();
+
+        }catch(Exception ex){
+            Log.e("birdGame" + getClass().getName(),"update state "+ex.getMessage(),ex);
         }
-    }
-
-        addItems();
-
-    _player.updateState();
-
-    //handle collisions
-    RectF playerLocation = new RectF(_player.getLocation());
-
-    for (GameObject gameObj : new ArrayList<>(_ganmeObjects)) {
-        // if collides
-        if (playerLocation.intersect(gameObj.getLocation())) {
-            gameObj.collideWithPlayer();
-        }
-    }
-
-    //is end _game
-    if (_player.getLifePoints() <= 0) {
-        //end of _game
-        gameOver();
-    } else if (isCompleteLevel()) {
-        startNextLevel();
-    }
-
-    computeTimeToEndLevel();
-
-
-    //Log.d(getClass().getName(),"updateState exit");
-    }
-    catch(Exception ex){
-        Log.e("birdGame" + getClass().getName(),"update state "+ex.getMessage(),ex);
-    }
     }
 
     private void addItems() {
@@ -194,10 +205,10 @@ public class Game {
         //return System.currentTimeMillis() > _timeToEndOfLevelMilli;
     }
 
-    private void startNextLevel() {
+    private void  startNextLevel() {
         _gameEnded=true;
         saveHighScore();
-        GameManager.instance().nextLevel(_context,_view);
+        GameManager.instance().nextLevel(_view);
     }
 
     private void gameOver() {
@@ -205,10 +216,10 @@ public class Game {
         saveHighScore();
 
         //we do not want to go back t bird sprite activity
-        ((Activity)_context).finish();
+        ((Activity)_view.getContext()).finish();
 
         //go to _game over screen
-        _context.startActivity(new Intent(_context, GameOverActivity.class));
+        _view.getContext().startActivity(new Intent(_view.getContext(), GameOverActivity.class));
     }
 
  //   private void collideWithObstecle() {
@@ -333,6 +344,23 @@ public class Game {
     public void setPaused(boolean _paused) {
         this._paused = _paused;
     }
+
+    public void onBackPressed() {
+        //todo
+    }
     //API
+
+
+    public void start()
+    {
+        initCreators();
+    }
+
+    public void stop()
+    {
+        _paused=true;
+    }
+
+
 
 }

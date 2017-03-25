@@ -14,7 +14,6 @@ import java.util.concurrent.Executors;
 
 public class Utils {
 
-    public static final Random random =new Random(System.currentTimeMillis());
     public static final String CACHE_BIRD_FEATHER_BITMAP = "CACHE_BIRD_FEATHER_BITMAP";
     static ExecutorService threadPool=null;
     public static ExecutorService ThreadPool(){
@@ -27,7 +26,6 @@ public class Utils {
     public static void logError(Exception ex,String message){
         Log.e(LOG_TAG,message+" "+ex.getClass().getName()+" "+ex.getMessage(),ex);
     }
-
 
     public static final String LOG_TAG="birdGame";
 

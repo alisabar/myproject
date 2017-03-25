@@ -18,26 +18,25 @@ public class BirdSpriteActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bird_sprite);
         ((GameView)findViewById(R.id.gameView)).onCreate();
-       // initTouch();
-
     }
 
-    private GestureDetectorCompat mDetector;
-
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //todo: show popup
+        //GameView view = (GameView)findViewById(R.id.gameView);
+        //view.onBackPressed();
+    }
 
     public boolean onTouchEvent(MotionEvent event){
-        View view = ((GameView)findViewById(R.id.gameView));
+        View view = findViewById(R.id.gameView);
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
 
             public boolean onTouch (View view, MotionEvent event){
                 if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
                     Log.d("TouchTest", "Touch down");
-
-                    //while (!(event.getAction() == android._view.MotionEvent.ACTION_UP)) {
                         view.onTouchEvent(event);
-                    //}
                 }
                 return false;
 

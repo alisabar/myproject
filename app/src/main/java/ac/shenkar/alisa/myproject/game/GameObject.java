@@ -50,7 +50,7 @@ public abstract class GameObject  {
     )
     {
         _view=view;
-        _context=context;
+        _context=context.getApplicationContext();
         _game = game;
 
         prepareCharacter();
